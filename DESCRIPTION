@@ -1,15 +1,19 @@
 Package: distdiffR
-Title: What the Package Does (One Line, Title Case)
+Title: Two-Sample Tests of Distributional Equality for Bivariate Data
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Eric",
+           family = "McKinney",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           email = "ericmckinney77@gmail.com",
+           comment = c(ORCID = "0000-0001-7537-9877"))
+Description: A collection of bivariate two-sample tests for distributional
+    equality are provided. The tests make use of statistics between empirical
+    distribution functions averaged across a series of rotations and or toroidal
+    shifts of the pooled samples. Another version of the test also exists when
+    combining bivariate data from multiple sources into each of the two-samples,
+    respectively, which treats each contribution equally.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

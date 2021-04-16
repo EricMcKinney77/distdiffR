@@ -1,3 +1,15 @@
+#' The Psi_DWS Statistic
+#'
+#' This statistic computes the double weighted squared (DWS) differences between
+#' the empirical cumulative distribution functions for the two samples.
+#'
+#' @param data a two column matrix of the bivariate pooled samples
+#' @param subjects a numerical vector of sample labels (use either 1 or 2)
+#'
+#' @return the Psi_DWS statistic
+#' @export
+#'
+#' @examples
 CalcPsiDWS <- function(data, subjects) {
   data1 <- data[subjects == 1, ]
   data2 <- data[subjects == 2, ]
