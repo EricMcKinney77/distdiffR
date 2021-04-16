@@ -1,8 +1,9 @@
-#' The rotational distDiffR test
+#' The combined rotational and toroidal shift distDiffR test
 #'
 #' @param data1 a two column matrix of bivariate observations from one sample
 #' @param data2 a two column matrix of bivariate observations from another sample
 #' @param numRot an integer number of rotational shifts of the pooled samples
+#' @param propPnts A numeric proportion of points to be used as toroidal shift origins
 #' @param numPerms an integer number of permutations of the original data
 #' @param psiFun a function specifying the Psi statistic calculation
 #' @param seedNum an integer random seed value
@@ -14,8 +15,8 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
-BivarDistDiffTest <- function(data1, data2, numRot = 8, numPerms = 999,
-                              psiFun = CalcPsiRWS, seedNum = NULL) {
+RotateToroDiffTest <- function(data1, data2, numRot = 8, propPnts = 0.1,
+                               numPerms = 999, psiFun = CalcPsiRWS, seedNum = NULL) {
 
   # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
   set.seed(seedNum)
@@ -66,14 +67,17 @@ BivarDistDiffTest <- function(data1, data2, numRot = 8, numPerms = 999,
   ## Rotate the data and stores the rotated data frames in a list.
   rotDataList <- RotateData(data, numRot)
 
+  ## Applies toroidal shifts to the data and stores the shifted data frames in a list.
+  lstOfRotShiftDataLists <- lapply(rotDataList, ToroShiftData, n1, n2, propPnts)
+
   ## Calculate psi for the real data
-  truePsi <- mean(sapply(rotDataList, psiFun, subjects))
+  truePsi <- mean(sapply(lstOfRotShiftDataLists, function(rotDataLst) mean(sapply(rotDataLst, psiFun, subjects))))
 
   # Calculate psi for all permutations of the rotated data.
   permPsi <- rep(0, numPerms)
   for (i in 1:numPerms) {
     permSubj <- sample(subjects, length(subjects), replace = FALSE)
-    permPsi[i] <- mean(sapply(rotDataList, psiFun, permSubj))
+    permPsi[i] <- mean(sapply(lstOfRotShiftDataLists, function(rotDataLst) mean(sapply(rotDataLst, psiFun, permSubj))))
   }
 
   list(psiStat = truePsi,

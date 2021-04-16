@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// ToroShiftData
+List ToroShiftData(NumericMatrix data, int n1, int n2, float propPnts);
+RcppExport SEXP _distdiffR_ToroShiftData(SEXP dataSEXP, SEXP n1SEXP, SEXP n2SEXP, SEXP propPntsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< float >::type propPnts(propPntsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ToroShiftData(data, n1, n2, propPnts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // bcdf
 NumericVector bcdf(NumericMatrix data, NumericMatrix eval);
 RcppExport SEXP _distdiffR_bcdf(SEXP dataSEXP, SEXP evalSEXP) {
@@ -19,6 +33,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_distdiffR_ToroShiftData", (DL_FUNC) &_distdiffR_ToroShiftData, 4},
     {"_distdiffR_bcdf", (DL_FUNC) &_distdiffR_bcdf, 2},
     {NULL, NULL, 0}
 };
