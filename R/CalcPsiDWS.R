@@ -8,8 +8,6 @@
 #'
 #' @return the Psi_DWS statistic
 #' @export
-#'
-#' @examples
 CalcPsiDWS <- function(data, subjects) {
   data1 <- data[subjects == 1, ]
   data2 <- data[subjects == 2, ]
