@@ -1,3 +1,13 @@
+#' The Psi_RWS Statistic
+#'
+#' This statistic computes the reversed weighted squared (RWS) differences between
+#' the empirical cumulative distribution functions for the two samples.
+#'
+#' @param data a two column matrix of the bivariate pooled samples
+#' @param subjects a numerical vector of sample labels (use either 1 or 2)
+#'
+#' @return the Psi_RWS statistic
+#' @export
 CalcPsiRWS <- function(data, subjects) {
   data1 <- data[subjects == 1, ]
   data2 <- data[subjects == 2, ]

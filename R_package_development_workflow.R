@@ -33,11 +33,13 @@ load_all()
 # (10) Use check() to make sure all pieces of the package still work well with each other
 check()
 
+
 # (11) Add documentation with Code > Insert Roxygen Skeleton
 
 # (12) Use document() to publish the documentation to the man folder using Roxygen
+document()
 
-# (13) check() and commit() again
+# (13) check() and commit again
 
 # (14) usethis::use_rcpp() for setting up the package for Rcpp
 

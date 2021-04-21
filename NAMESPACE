@@ -2,7 +2,13 @@
 
 export(BivarDistDiffTest)
 export(BivarToroDiffTest)
+export(CalcPsiDWA)
 export(CalcPsiDWS)
+export(CalcPsiRWA)
+export(CalcPsiRWS)
+export(CalcPsiUWA)
+export(CalcPsiUWS)
+export(RotateData)
 export(RotateToroDiffTest)
 export(ToroShiftData)
 export(bcdf)
