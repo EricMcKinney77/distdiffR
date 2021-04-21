@@ -6,17 +6,13 @@
 
 library(devtools)
 packageVersion("devtools") # At least 2.3.2.9000
-library(tidyverse)
-library(fs)
 
-create_package("~/Documents/GitHub/foofactors")
+create_package("~/Documents/GitHub/distdiffR")
 
 # (4) Make an initial commit, pull, and push to the remote master
 
+# Reload devtools
 library(devtools)
-library(tidyverse)
-library(fs)
-
 
 # (5) Write functions, objects, etc...
 
@@ -44,3 +40,5 @@ check()
 # (13) check() and commit() again
 
 # (14) usethis::use_rcpp() for setting up the package for Rcpp
+
+# (15) Use the Build menu (Build -> More -> Build source package) to create a .tar.gz file
