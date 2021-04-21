@@ -25,8 +25,7 @@ use_r("fbind")
 
 # (7) Copy the function over to fbind.R
 
-# (8) Use load_all() to make sure the package development is working well
-load_all()
+# (8) Use Install and Restart to make sure the package development is working well
 
 # (9) Commit, pull, push
 
@@ -42,6 +41,11 @@ document()
 # (13) check() and commit again
 
 # (14) usethis::use_rcpp() for setting up the package for Rcpp
+
+
+# Rcpp: Create a C++ script, write the code and include documentation. Then Ctrl + Shift + D.
+# Install and Restart
+
 
 # (15) Use the Build menu (Build -> More -> Build source package) to create a .tar.gz file
 # Otherwise, use:
