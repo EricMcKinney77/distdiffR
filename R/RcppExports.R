@@ -10,7 +10,7 @@
 #' @return A two column matrix of the shifted pooled samples
 #' @export
 ToroShiftData <- function(data, n1, n2, propPnts = 1) {
-    .Call('_distdiffR_ToroShiftData', PACKAGE = 'distdiffR', data, n1, n2, propPnts)
+    .Call(`_distdiffR_ToroShiftData`, data, n1, n2, propPnts)
 }
 
 #' Construct and compute bivariate cumulative distribution function values
@@ -20,6 +20,6 @@ ToroShiftData <- function(data, n1, n2, propPnts = 1) {
 #' @return A numeric vector of output values from the EBCDF
 #' @export
 bcdf <- function(data, eval) {
-    .Call('_distdiffR_bcdf', PACKAGE = 'distdiffR', data, eval)
+    .Call(`_distdiffR_bcdf`, data, eval)
 }
 
