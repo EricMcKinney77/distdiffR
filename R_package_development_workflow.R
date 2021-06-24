@@ -11,7 +11,7 @@ create_package("~/Documents/GitHub/distdiffR")
 
 # (4) Make an initial commit, pull, and push to the remote master
 
-# Reload devtools
+# Reload devtools ################### Additions and Maintenance, Start here.
 library(devtools)
 
 # (5) Write functions, objects, etc...
