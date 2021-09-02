@@ -49,6 +49,7 @@ document()
 
 
 # (15) Use the Build menu (Build -> More -> Build source package) to create a .tar.gz file
+# This is helpful for the CHPC install
 # Otherwise, use:
 library(devtools)
 install_github("https://github.com/EricMcKinney77/distdiffR")
