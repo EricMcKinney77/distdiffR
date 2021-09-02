@@ -4,6 +4,7 @@
 #' @param aggdata2 A three column matrix of bivariate observations from another sample with the third column being the subject labels
 #' @param numRot An integer number of rotational shifts of the pooled samples
 #' @param propPnts A numeric proportion of points to be used as toroidal shift origins
+#' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.
 #' @param numPerms An integer number of permutations of the original data
 #' @param psiFun A function specifying the Psi statistic calculation. Default is the CalcGroupPsiRWS.
 #' @param seedNum An integer random seed value
@@ -15,8 +16,16 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
-AggregatedRotateToroDiffTest <- function(aggdata1, aggdata2, numRot = 8, propPnts = 0.1,
+AggregatedRotateToroDiffTest <- function(aggdata1, aggdata2, numRot = 8, propPnts = NULL, numShifts = NULL,
                                          numPerms = 99, psiFun = CalcGroupPsiRWS, seedNum = NULL) {
+  noPropPnts <- is.null(propPnts)
+  noNumShifts <- is.null(numShifts)
+  if (noPropPnts & noNumShifts) {
+    stop("Must provide propPnts or numShifts.")
+  } else if (!noPropPnts & !noNumShifts) {
+    stop("Must provide either propPnts or numShifts, but not both.")
+  }
+
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
   subjNums1 <- aggdata1[, 3]
   subjNums2 <- aggdata2[, 3]
@@ -76,7 +85,11 @@ AggregatedRotateToroDiffTest <- function(aggdata1, aggdata2, numRot = 8, propPnt
   rotDataList <- RotateData(data, numRot)
 
   ## Applies toroidal shifts to the data and store the shifted data frames in a list.
-  lstOfRotShiftDataLists <- lapply(rotDataList, ToroShiftData, n1, n2, propPnts)
+  if (!noPropPnts) {
+    lstOfRotShiftDataLists <- lapply(rotDataList, PropToroShiftData, n1, n2, propPnts)
+  } else if (!noNumShifts) {
+    lstOfRotShiftDataLists <- lapply(rotDataList, NumToroShiftData, n1, n2, numShifts)
+  }
 
   ## Calculate psi for the real data
   truePsi <- mean(sapply(lstOfRotShiftDataLists, function(rotDataLst) mean(sapply(rotDataLst, psiFun, groupNums, subjNums))))

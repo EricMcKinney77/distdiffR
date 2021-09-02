@@ -4,6 +4,7 @@
 #' @param data2 a two column matrix of bivariate observations from another sample
 #' @param numRot an integer number of rotational shifts of the pooled samples
 #' @param propPnts A numeric proportion of points to be used as toroidal shift origins
+#' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.
 #' @param numPerms an integer number of permutations of the original data
 #' @param psiFun a function specifying the Psi statistic calculation
 #' @param seedNum an integer random seed value
@@ -15,8 +16,15 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
-RotateToroDiffTest <- function(data1, data2, numRot = 8, propPnts = 0.1,
+RotateToroDiffTest <- function(data1, data2, numRot = 8, propPnts = NULL, numShifts = NULL,
                                numPerms = 999, psiFun = CalcPsiRWS, seedNum = NULL) {
+  noPropPnts <- is.null(propPnts)
+  noNumShifts <- is.null(numShifts)
+  if (noPropPnts & noNumShifts) {
+    stop("Must provide propPnts or numShifts.")
+  } else if (!noPropPnts & !noNumShifts) {
+    stop("Must provide either propPnts or numShifts, but not both.")
+  }
 
   # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
   set.seed(seedNum)
@@ -68,7 +76,11 @@ RotateToroDiffTest <- function(data1, data2, numRot = 8, propPnts = 0.1,
   rotDataList <- RotateData(data, numRot)
 
   ## Applies toroidal shifts to the data and stores the shifted data frames in a list.
-  lstOfRotShiftDataLists <- lapply(rotDataList, ToroShiftData, n1, n2, propPnts)
+  if (!noPropPnts) {
+    lstOfRotShiftDataLists <- lapply(rotDataList, PropToroShiftData, n1, n2, propPnts)
+  } else if (!noNumShifts) {
+    lstOfRotShiftDataLists <- lapply(rotDataList, NumToroShiftData, n1, n2, numShifts)
+  }
 
   ## Calculate psi for the real data
   truePsi <- mean(sapply(lstOfRotShiftDataLists, function(rotDataLst) mean(sapply(rotDataLst, psiFun, subjects))))

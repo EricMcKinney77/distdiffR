@@ -5,9 +5,23 @@
 
 using namespace Rcpp;
 
-// ToroShiftData
-List ToroShiftData(NumericMatrix data, int n1, int n2, float propPnts);
-RcppExport SEXP _distdiffR_ToroShiftData(SEXP dataSEXP, SEXP n1SEXP, SEXP n2SEXP, SEXP propPntsSEXP) {
+// NumToroShiftData
+List NumToroShiftData(NumericMatrix data, int n1, int n2, int numShifts);
+RcppExport SEXP _distdiffR_NumToroShiftData(SEXP dataSEXP, SEXP n1SEXP, SEXP n2SEXP, SEXP numShiftsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< int >::type numShifts(numShiftsSEXP);
+    rcpp_result_gen = Rcpp::wrap(NumToroShiftData(data, n1, n2, numShifts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// PropToroShiftData
+List PropToroShiftData(NumericMatrix data, int n1, int n2, float propPnts);
+RcppExport SEXP _distdiffR_PropToroShiftData(SEXP dataSEXP, SEXP n1SEXP, SEXP n2SEXP, SEXP propPntsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -15,7 +29,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
     Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
     Rcpp::traits::input_parameter< float >::type propPnts(propPntsSEXP);
-    rcpp_result_gen = Rcpp::wrap(ToroShiftData(data, n1, n2, propPnts));
+    rcpp_result_gen = Rcpp::wrap(PropToroShiftData(data, n1, n2, propPnts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -33,7 +47,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_distdiffR_ToroShiftData", (DL_FUNC) &_distdiffR_ToroShiftData, 4},
+    {"_distdiffR_NumToroShiftData", (DL_FUNC) &_distdiffR_NumToroShiftData, 4},
+    {"_distdiffR_PropToroShiftData", (DL_FUNC) &_distdiffR_PropToroShiftData, 4},
     {"_distdiffR_bcdf", (DL_FUNC) &_distdiffR_bcdf, 2},
     {NULL, NULL, 0}
 };

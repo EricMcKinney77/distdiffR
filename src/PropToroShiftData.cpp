@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Apply a toroidal shift to the pooled samples
+//' Apply a toroidal shift to the pooled samples using a proportion of points
 //'
 //' @param data A two column matrix of the pooled samples
 //' @param n1 An integer sample size for the first sample
@@ -10,7 +10,7 @@ using namespace Rcpp;
 //' @return A two column matrix of the shifted pooled samples
 //' @export
 // [[Rcpp::export]]
-List ToroShiftData(NumericMatrix data, int n1, int n2, float propPnts = 1) {
+List PropToroShiftData(NumericMatrix data, int n1, int n2, float propPnts = 1) {
   NumericMatrix::Column X = data( _, 0);
   NumericMatrix::Column Y = data( _, 1);
   float dataWidth = max(X) - min(X);

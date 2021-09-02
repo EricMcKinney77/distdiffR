@@ -25,11 +25,11 @@ use_r("fbind")
 
 # (7) Copy the function over to fbind.R
 
-# (8) Use Install and Restart to make sure the package development is working well
+# (8) Click Install and Restart to make sure the package development is working well
 
 # (9) Commit, pull, push
 
-# (10) Use check() to make sure all pieces of the package still work well with each other
+# (10) Use (or click) check() to make sure all pieces of the package still work well with each other
 check()
 
 
