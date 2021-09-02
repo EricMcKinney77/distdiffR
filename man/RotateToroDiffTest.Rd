@@ -8,7 +8,8 @@ RotateToroDiffTest(
   data1,
   data2,
   numRot = 8,
-  propPnts = 0.1,
+  propPnts = NULL,
+  numShifts = NULL,
   numPerms = 999,
   psiFun = CalcPsiRWS,
   seedNum = NULL
@@ -22,6 +23,8 @@ RotateToroDiffTest(
 \item{numRot}{an integer number of rotational shifts of the pooled samples}
 
 \item{propPnts}{A numeric proportion of points to be used as toroidal shift origins}
+
+\item{numShifts}{A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.}
 
 \item{numPerms}{an integer number of permutations of the original data}
 

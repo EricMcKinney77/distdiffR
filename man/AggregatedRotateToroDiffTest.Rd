@@ -8,7 +8,8 @@ AggregatedRotateToroDiffTest(
   aggdata1,
   aggdata2,
   numRot = 8,
-  propPnts = 0.1,
+  propPnts = NULL,
+  numShifts = NULL,
   numPerms = 99,
   psiFun = CalcGroupPsiRWS,
   seedNum = NULL
@@ -22,6 +23,8 @@ AggregatedRotateToroDiffTest(
 \item{numRot}{An integer number of rotational shifts of the pooled samples}
 
 \item{propPnts}{A numeric proportion of points to be used as toroidal shift origins}
+
+\item{numShifts}{A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.}
 
 \item{numPerms}{An integer number of permutations of the original data}
 

@@ -7,24 +7,27 @@
 BivarToroDiffTest(
   data1,
   data2,
-  propPnts = 1,
+  propPnts = NULL,
+  numShifts = NULL,
   numPerms = 999,
   psiFun = CalcPsiRWS,
   seedNum = NULL
 )
 }
 \arguments{
-\item{data1}{a two column matrix of bivariate observations from one sample}
+\item{data1}{A two column matrix of bivariate observations from one sample}
 
-\item{data2}{a two column matrix of bivariate observations from another sample}
+\item{data2}{A two column matrix of bivariate observations from another sample}
 
 \item{propPnts}{A numeric proportion of points to be used as toroidal shift origins}
 
-\item{numPerms}{an integer number of permutations of the original data}
+\item{numShifts}{A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.}
 
-\item{psiFun}{a function specifying the Psi statistic calculation}
+\item{numPerms}{An integer number of permutations of the original data}
 
-\item{seedNum}{an integer random seed value}
+\item{psiFun}{A function specifying the Psi statistic calculation}
+
+\item{seedNum}{An integer random seed value}
 }
 \value{
 A list including three objects:
