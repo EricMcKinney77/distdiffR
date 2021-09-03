@@ -9,31 +9,34 @@ BivarToroDiffTest(
   data2,
   propPnts = NULL,
   numShifts = NULL,
+  shiftThrshld = 100,
   numPerms = 999,
   psiFun = CalcPsiRWS,
   seedNum = NULL
 )
 }
 \arguments{
-\item{data1}{A two column matrix of bivariate observations from one sample}
+\item{data1}{A two column matrix of bivariate observations from one sample.}
 
-\item{data2}{A two column matrix of bivariate observations from another sample}
+\item{data2}{A two column matrix of bivariate observations from another sample.}
 
-\item{propPnts}{A numeric proportion of points to be used as toroidal shift origins}
+\item{propPnts}{A numeric proportion of points to be used as toroidal shift origins. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.}
 
-\item{numShifts}{A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.}
+\item{numShifts}{A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.}
 
-\item{numPerms}{An integer number of permutations of the original data}
+\item{shiftThrshld}{A numeric integer. Used if neither propPnts or numShifts are provided. If the pooled sample size is less than shiftThrshld, every point will be used as a toroidal shift origin. Otherwise, only a random sample of shiftThrshld points will be used.}
 
-\item{psiFun}{A function specifying the Psi statistic calculation}
+\item{numPerms}{An integer number of permutations of the original data.}
 
-\item{seedNum}{An integer random seed value}
+\item{psiFun}{A function specifying the Psi statistic calculation.}
+
+\item{seedNum}{An integer random seed value.}
 }
 \value{
 A list including three objects:
-(1) the Psi statistic computed on the original data
-(2) a vector of Psi statistics computed on the permuted data
-(3) the p-value for the test
+(1) The Psi statistic computed on the original data
+(2) A vector of Psi statistics computed on the permuted data
+(3) The p-value for the test
 }
 \description{
 The toroidal shift distDiffR test

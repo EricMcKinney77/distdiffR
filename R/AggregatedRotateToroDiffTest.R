@@ -3,8 +3,9 @@
 #' @param aggdata1 A three column matrix of bivariate observations from one sample with the third column being the subject labels
 #' @param aggdata2 A three column matrix of bivariate observations from another sample with the third column being the subject labels
 #' @param numRot An integer number of rotational shifts of the pooled samples
-#' @param propPnts A numeric proportion of points to be used as toroidal shift origins
-#' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size.
+#' @param propPnts A numeric proportion of points to be used as toroidal shift origins. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.
+#' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.
+#' @param shiftThrshld A numeric integer. Used if neither propPnts or numShifts are provided. If the pooled sample size is less than shiftThrshld, every point will be used as a toroidal shift origin. Otherwise, only a random sample of shiftThrshld points will be used.
 #' @param numPerms An integer number of permutations of the original data
 #' @param psiFun A function specifying the Psi statistic calculation. Default is the CalcGroupPsiRWS.
 #' @param seedNum An integer random seed value
@@ -16,16 +17,16 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
-AggregatedRotateToroDiffTest <- function(aggdata1, aggdata2, numRot = 8, propPnts = NULL, numShifts = NULL,
-                                         numPerms = 99, psiFun = CalcGroupPsiRWS, seedNum = NULL) {
-  noPropPnts <- is.null(propPnts)
-  noNumShifts <- is.null(numShifts)
-  if (noPropPnts & noNumShifts) {
-    stop("Must provide propPnts or numShifts.")
-  } else if (!noPropPnts & !noNumShifts) {
-    stop("Must provide either propPnts or numShifts, but not both.")
-  }
-
+AggregatedRotateToroDiffTest <- function(aggdata1,
+                                         aggdata2,
+                                         numRot = 8,
+                                         propPnts = NULL,
+                                         numShifts = NULL,
+                                         shiftThrshld = 100,
+                                         numPerms = 99,
+                                         psiFun = CalcGroupPsiRWS,
+                                         seedNum = NULL) {
+  # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
   subjNums1 <- aggdata1[, 3]
   subjNums2 <- aggdata2[, 3]
@@ -34,15 +35,25 @@ AggregatedRotateToroDiffTest <- function(aggdata1, aggdata2, numRot = 8, propPnt
   aggdata1 <- aggdata1[, 1:2]
   aggdata2 <- aggdata2[, 1:2]
 
-  # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
-  set.seed(seedNum)
-
-  ## Combines the data from two groups into one long matrix.
+  # Combines the data from two subjects into one long matrix.
   n1 <- nrow(aggdata1)
   n2 <- nrow(aggdata2)
   groupNums <- rep(1:2, times = c(n1, n2))
 
+  # Check for conflict between propPnts and numShifts.
+  noPropPnts <- is.null(propPnts)
+  noNumShifts <- is.null(numShifts)
+  n_pooled <- n1 + n2
+  if (!noPropPnts & !noNumShifts) {
+    stop("Must provide either propPnts or numShifts, but not both.")
+  } else if (noPropPnts & noNumShifts) { # Use either numShifts or set using shiftThrshld.
+    numShifts <- ifelse(n_pooled > shiftThrshld, shiftThrshld, n_pooled)
+    noNumShifts <- FALSE
+  }
+
   # Check and remove duplicate data values between samples
+  set.seed(seedNum)
+
   aggdata1DuplRwsWaggdata2 <- function(aggdata1, aggdata2) {
     aggdata1strgs <- unlist(sapply(1:n1, function(j) paste(aggdata1[j, ], collapse = '_')))
     aggdata2strgs <- unlist(sapply(1:n2, function(j) paste(aggdata2[j, ], collapse = '_')))
