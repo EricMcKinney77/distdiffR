@@ -49,10 +49,11 @@ use_r("fbind")
 # (12) Use document() to publish the documentation to the man folder using Roxygen
 devtools::document()
 
-# (13) check() and commit again
+# (13) Check and commit again
+
+
 
 # (14) usethis::use_rcpp() for setting up the package for Rcpp
-
 
 # Rcpp: Create a C++ script, write the code and include documentation. Then Ctrl + Shift + D.
 # Install and Restart
