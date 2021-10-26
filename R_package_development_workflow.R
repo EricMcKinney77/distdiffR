@@ -1,5 +1,7 @@
 # R package development workflow
 
+################### Initial setup steps.
+
 # (1) Initialize a GitHub Repo
 # (2) Create a version controlled project for the package
 # (3) Run the following code:
@@ -11,8 +13,18 @@ create_package("~/Documents/GitHub/distdiffR")
 
 # (4) Make an initial commit, pull, and push to the remote master
 
-# Reload devtools ################### Additions and Maintenance, Start here.
+
+
+################### Additions and Maintenance, Start here.
+
+# Reload devtools
 library(devtools)
+
+# Depending on the additions / patches, bump the version number in the
+# DESCRIPTION file (see https://yihui.org/en/2013/06/r-package-versioning/).
+# Use x.y.z version numbers (major.minor.patch, e.g. 0.1.12).
+# Then, remove the old version of the package from your local machine and
+# restart Rstudio before rebuilding.
 
 # (5) Write functions, objects, etc...
 
@@ -25,19 +37,17 @@ use_r("fbind")
 
 # (7) Copy the function over to fbind.R
 
-# (8) Click Install and Restart to make sure the package development is working well
-# If you change the name of a .cpp file (and function) run document() first to update namespace
+# (8) Click Build -> Install and Restart to make sure the package development is working well
+# If you change the name of a .cpp file (and function) run devtools::document() first to update namespace
 
 # (9) Commit, pull, push
 
-# (10) Use (or click) check() to make sure all pieces of the package still work well with each other
-check()
-
+# (10) Click Build -> Check to make sure all pieces of the package still work well with each other
 
 # (11) Add documentation with Code > Insert Roxygen Skeleton
 
 # (12) Use document() to publish the documentation to the man folder using Roxygen
-document()
+devtools::document()
 
 # (13) check() and commit again
 
