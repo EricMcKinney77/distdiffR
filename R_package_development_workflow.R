@@ -23,7 +23,8 @@ library(devtools)
 # Depending on the additions / patches, bump the version number in the
 # DESCRIPTION file (see https://yihui.org/en/2013/06/r-package-versioning/).
 # Use x.y.z version numbers (major.minor.patch, e.g. 0.1.12).
-# Then, remove the old version of the package from your local machine and
+# Run devtools::document() if file names change before rebuilding.
+# May need to remove the old version of the package from your local machine and
 # restart Rstudio before rebuilding.
 
 # (5) Write functions, objects, etc...

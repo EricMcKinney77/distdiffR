@@ -12,7 +12,7 @@ RotateToroDiffTest(
   numShifts = NULL,
   shiftThrshld = 100,
   numPerms = 999,
-  psiFun = CalcPsiRWS,
+  psiFun = CalcPsiCWS,
   seedNum = NULL
 )
 }

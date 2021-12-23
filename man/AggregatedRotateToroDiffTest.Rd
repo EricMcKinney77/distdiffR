@@ -12,7 +12,7 @@ AggregatedRotateToroDiffTest(
   numShifts = NULL,
   shiftThrshld = 100,
   numPerms = 99,
-  psiFun = CalcGroupPsiRWS,
+  psiFun = CalcGroupPsiCWS,
   seedNum = NULL
 )
 }
@@ -31,7 +31,7 @@ AggregatedRotateToroDiffTest(
 
 \item{numPerms}{An integer number of permutations of the original data}
 
-\item{psiFun}{A function specifying the Psi statistic calculation. Default is the CalcGroupPsiRWS.}
+\item{psiFun}{A function specifying the Psi statistic calculation. Default is the CalcGroupPsiCWS.}
 
 \item{seedNum}{An integer random seed value}
 }

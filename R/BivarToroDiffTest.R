@@ -22,7 +22,7 @@ BivarToroDiffTest <- function(data1,
                               numShifts = NULL,
                               shiftThrshld = 100,
                               numPerms = 999,
-                              psiFun = CalcPsiRWS,
+                              psiFun = CalcPsiCWS,
                               seedNum = NULL) {
   # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
   # Combines the data from two subjects into one long matrix.
@@ -44,14 +44,14 @@ BivarToroDiffTest <- function(data1,
   # Check and remove duplicate data values between samples
   set.seed(seedNum)
 
-  data1DuplRwsWdata2 <- function(data1, data2) {
+  data1DuplRowsWdata2 <- function(data1, data2) {
     data1strgs <- unlist(sapply(1:n1, function(j) paste(data1[j, ], collapse = '_')))
     data2strgs <- unlist(sapply(1:n2, function(j) paste(data2[j, ], collapse = '_')))
     which(data1strgs %in% intersect(data1strgs, data2strgs))
   }
-  duplRwsInd <- data1DuplRwsWdata2(data1, data2)
+  duplRowsInd <- data1DuplRowsWdata2(data1, data2)
 
-  if (length(duplRwsInd) != 0) {
+  if (length(duplRowsInd) != 0) {
     print("Some data values were not unique between subjects. Adding an insignificant amount of noise.")
 
     # Determine the number of significant digits that were used to record the data
@@ -66,9 +66,9 @@ BivarToroDiffTest <- function(data1,
     roundBound <- 5 * 10^(-(numSigDigits + 1))
 
     # Keep adding small amounts of noise until data1 and data2 have no more duplicate rows
-    while (length(duplRwsInd) != 0) {
-      data1[duplRwsInd, ] <- data1[duplRwsInd, ] + runif(length(duplRwsInd) * 2, -roundBound, roundBound)
-      duplRwsInd <- data1DuplRwsWdata2(data1, data2)
+    while (length(duplRowsInd) != 0) {
+      data1[duplRowsInd, ] <- data1[duplRowsInd, ] + runif(length(duplRowsInd) * 2, -roundBound, roundBound)
+      duplRowsInd <- data1DuplRowsWdata2(data1, data2)
     }
   }
 

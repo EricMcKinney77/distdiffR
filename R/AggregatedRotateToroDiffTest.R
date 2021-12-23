@@ -7,7 +7,7 @@
 #' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.
 #' @param shiftThrshld A numeric integer. Used if neither propPnts or numShifts are provided. If the pooled sample size is less than shiftThrshld, every point will be used as a toroidal shift origin. Otherwise, only a random sample of shiftThrshld points will be used.
 #' @param numPerms An integer number of permutations of the original data
-#' @param psiFun A function specifying the Psi statistic calculation. Default is the CalcGroupPsiRWS.
+#' @param psiFun A function specifying the Psi statistic calculation. Default is the CalcGroupPsiCWS.
 #' @param seedNum An integer random seed value
 #'
 #' @return A list including three objects:
@@ -24,7 +24,7 @@ AggregatedRotateToroDiffTest <- function(aggdata1,
                                          numShifts = NULL,
                                          shiftThrshld = 100,
                                          numPerms = 99,
-                                         psiFun = CalcGroupPsiRWS,
+                                         psiFun = CalcGroupPsiCWS,
                                          seedNum = NULL) {
   # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
@@ -54,14 +54,14 @@ AggregatedRotateToroDiffTest <- function(aggdata1,
   # Check and remove duplicate data values between samples
   set.seed(seedNum)
 
-  aggdata1DuplRwsWaggdata2 <- function(aggdata1, aggdata2) {
+  aggdata1DuplRowsWaggdata2 <- function(aggdata1, aggdata2) {
     aggdata1strgs <- unlist(sapply(1:n1, function(j) paste(aggdata1[j, ], collapse = '_')))
     aggdata2strgs <- unlist(sapply(1:n2, function(j) paste(aggdata2[j, ], collapse = '_')))
     which(aggdata1strgs %in% intersect(aggdata1strgs, aggdata2strgs))
   }
-  duplRwsInd <- aggdata1DuplRwsWaggdata2(aggdata1, aggdata2)
+  duplRowsInd <- aggdata1DuplRowsWaggdata2(aggdata1, aggdata2)
 
-  if (length(duplRwsInd) != 0) {
+  if (length(duplRowsInd) != 0) {
     print("Some data values were not unique between groups. Adding an insignificant amount of noise.")
 
     # Determine the number of significant digits that were used to record the data
@@ -76,9 +76,9 @@ AggregatedRotateToroDiffTest <- function(aggdata1,
     roundBound <- 5 * 10^(-(numSigDigits + 1))
 
     # Keep adding small amounts of noise until aggdata1 and aggdata2 have no more duplicate rows
-    while (length(duplRwsInd) != 0) {
-      aggdata1[duplRwsInd, ] <- aggdata1[duplRwsInd, ] + runif(length(duplRwsInd) * 2, -roundBound, roundBound)
-      duplRwsInd <- aggdata1DuplRwsWaggdata2(aggdata1, aggdata2)
+    while (length(duplRowsInd) != 0) {
+      aggdata1[duplRowsInd, ] <- aggdata1[duplRowsInd, ] + runif(length(duplRowsInd) * 2, -roundBound, roundBound)
+      duplRowsInd <- aggdata1DuplRowsWaggdata2(aggdata1, aggdata2)
     }
   }
 

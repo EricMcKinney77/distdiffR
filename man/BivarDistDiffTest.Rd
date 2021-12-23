@@ -9,7 +9,7 @@ BivarDistDiffTest(
   data2,
   numRot = 8,
   numPerms = 999,
-  psiFun = CalcPsiRWS,
+  psiFun = CalcPsiCWS,
   seedNum = NULL
 )
 }

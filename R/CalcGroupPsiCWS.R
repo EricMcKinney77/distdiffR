@@ -1,15 +1,16 @@
-#' The Psi_RWS statistic for aggregated group data
+#' The Psi_CWS statistic for aggregated group data
 #'
-#' This statistic computes the reversed weighted squared (RWS) differences between
-#' the averaged subject empirical cumulative distribution functions for the two samples.
+#' This statistic computes the complementary weighted squared (CWS) differences
+#' between the averaged subject empirical cumulative distribution functions for
+#' the two samples.
 #'
 #' @param data A two column matrix of the bivariate pooled samples
 #' @param groups A numeric vector of sample (or group) labels (use either 1 or 2)
 #' @param subjects A numeric vector of subject labels
 #'
-#' @return the Psi_RWS statistic
+#' @return the Psi_CWS statistic
 #' @export
-CalcGroupPsiRWS <- function(data, groups, subjects) {
+CalcGroupPsiCWS <- function(data, groups, subjects) {
   data1 <- data[groups == 1, ]
   data2 <- data[groups == 2, ]
   subjects1 <- subjects[groups == 1]

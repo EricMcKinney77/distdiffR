@@ -1,14 +1,14 @@
-#' The Psi_RWA Statistic
+#' The Psi_CWA Statistic
 #'
-#' This statistic computes the reversed weighted absolute (RWA) differences between
-#' the empirical cumulative distribution functions for the two samples.
+#' This statistic computes the complementary weighted absolute (CWA) differences
+#' between the empirical cumulative distribution functions for the two samples.
 #'
 #' @param data a two column matrix of the bivariate pooled samples
 #' @param subjects a numerical vector of sample labels (use either 1 or 2)
 #'
-#' @return the Psi_RWA statistic
+#' @return the Psi_CWA statistic
 #' @export
-CalcPsiRWA <- function(data, subjects) {
+CalcPsiCWA <- function(data, subjects) {
   data1 <- data[subjects == 1, ]
   data2 <- data[subjects == 2, ]
   n1 <- nrow(data1)
