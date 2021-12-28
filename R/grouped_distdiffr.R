@@ -1,7 +1,7 @@
 #' The combined rotational and toroidal shift distDiffR test for aggregated group data
 #'
-#' @param aggdata1 A three column matrix of bivariate observations from one sample with the third column being the subject labels
-#' @param aggdata2 A three column matrix of bivariate observations from another sample with the third column being the subject labels
+#' @param aggdata1 A three column matrix of bivariate observations from one sample with the third column being the numeric subject labels
+#' @param aggdata2 A three column matrix of bivariate observations from another sample with the third column being the numeric subject labels
 #' @param numRot An integer number of rotational shifts of the pooled samples
 #' @param propPnts A numeric proportion of points to be used as toroidal shift origins. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.
 #' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.
@@ -26,7 +26,8 @@ grouped_distdiffr <- function(aggdata1,
                               numPerms = 99,
                               psiFun = CalcGroupPsiCWS,
                               seedNum = NULL) {
-  # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
+  set.seed(seedNum)
+
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
   subjNums1 <- aggdata1[, 3]
   subjNums2 <- aggdata2[, 3]
@@ -52,8 +53,6 @@ grouped_distdiffr <- function(aggdata1,
   }
 
   # Check and remove duplicate data values between samples
-  set.seed(seedNum)
-
   aggdata1DuplRowsWaggdata2 <- function(aggdata1, aggdata2) {
     aggdata1strgs <- unlist(sapply(1:n1, function(j) paste(aggdata1[j, ], collapse = '_')))
     aggdata2strgs <- unlist(sapply(1:n2, function(j) paste(aggdata2[j, ], collapse = '_')))
@@ -62,8 +61,6 @@ grouped_distdiffr <- function(aggdata1,
   duplRowsInd <- aggdata1DuplRowsWaggdata2(aggdata1, aggdata2)
 
   if (length(duplRowsInd) != 0) {
-    print("Some data values were not unique between groups. Adding an insignificant amount of noise.")
-
     # Determine the number of significant digits that were used to record the data
     decimalplaces <- function(x) {
       if (abs(x - round(x)) > .Machine$double.eps^0.5) {

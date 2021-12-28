@@ -17,9 +17,9 @@ grouped_distdiffr(
 )
 }
 \arguments{
-\item{aggdata1}{A three column matrix of bivariate observations from one sample with the third column being the subject labels}
+\item{aggdata1}{A three column matrix of bivariate observations from one sample with the third column being the numeric subject labels}
 
-\item{aggdata2}{A three column matrix of bivariate observations from another sample with the third column being the subject labels}
+\item{aggdata2}{A three column matrix of bivariate observations from another sample with the third column being the numeric subject labels}
 
 \item{numRot}{An integer number of rotational shifts of the pooled samples}
 
