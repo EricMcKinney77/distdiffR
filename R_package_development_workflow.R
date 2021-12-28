@@ -60,7 +60,12 @@ devtools::document()
 # Install and Restart
 
 
-# (15) Use the Build menu (Build -> More -> Build source package) to create a .tar.gz file
+
+# (15) usethis::use_vignette("package_name") to create a vignette folder and template
+
+
+
+# (16) Use the Build menu (Build -> More -> Build source package) to create a .tar.gz file
 # This is helpful for the CHPC install
 # Otherwise, use:
 library(devtools)

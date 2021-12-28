@@ -24,3 +24,7 @@ Imports:
     Rcpp,
     stats
 SystemRequirements: GNU make
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
