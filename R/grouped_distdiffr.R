@@ -17,15 +17,15 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
-AggregatedRotateToroDiffTest <- function(aggdata1,
-                                         aggdata2,
-                                         numRot = 8,
-                                         propPnts = NULL,
-                                         numShifts = NULL,
-                                         shiftThrshld = 100,
-                                         numPerms = 99,
-                                         psiFun = CalcGroupPsiCWS,
-                                         seedNum = NULL) {
+grouped_distdiffr <- function(aggdata1,
+                              aggdata2,
+                              numRot = 8,
+                              propPnts = NULL,
+                              numShifts = NULL,
+                              shiftThrshld = 25,
+                              numPerms = 99,
+                              psiFun = CalcGroupPsiCWS,
+                              seedNum = NULL) {
   # NOTE: Data cleaning must be done before applying this function, e.g., filter(X != 0 & Y != 0)
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
   subjNums1 <- aggdata1[, 3]
