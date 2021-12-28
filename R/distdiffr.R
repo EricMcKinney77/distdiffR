@@ -18,16 +18,16 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
-RotateToroDiffTest <- function(data1,
-                               data2,
-                               testType = "combined",
-                               numRot = 8,
-                               propPnts = NULL,
-                               numShifts = NULL,
-                               shiftThrshld = 25,
-                               numPerms = 999,
-                               psiFun = CalcPsiCWS,
-                               seedNum = NULL) {
+distdiffr <- function(data1,
+                      data2,
+                      testType = "combined",
+                      numRot = 8,
+                      propPnts = NULL,
+                      numShifts = NULL,
+                      shiftThrshld = 25,
+                      numPerms = 999,
+                      psiFun = CalcPsiCWS,
+                      seedNum = NULL) {
   set.seed(seedNum)
 
   ## Combines the data from two subjects into one long matrix.
