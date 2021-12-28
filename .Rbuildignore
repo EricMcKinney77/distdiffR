@@ -3,3 +3,4 @@
 ^distdiffR\.Rproj$
 ^LICENSE\.md$
 ^R_package_development_workflow.R$
+^distdiffRtest.R$
