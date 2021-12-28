@@ -19,7 +19,7 @@ This R package provides a collection of bivariate two-sample tests for distribut
 
 Below is an example using Fisher's Iris data to show test results when the null hypotheses are true (and both distributions are equivalent). This is done by randomly assigning all three of the species or iris to two samples. Since this is a bivariate test of distributional equality, only the first two independent variables are used.
 
-```{r setup, eval=FALSE}
+```{r setup}
 library(distdiffR)
 
 seedNum <- 123
@@ -46,7 +46,7 @@ When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrj
 
 Similar results are also shown for the toroidal and combined (rotational and toroidal) modified Syrjala tests:
 
-```{r nullTrue, eval=FALSE}
+```{r nullTrue}
 # Toroidal shift test with proportions of points
 output <- distdiffr(data1,
                     data2,
@@ -88,7 +88,7 @@ output$pval == 0.307
 
 For any of the above tests, the data input order is arbitrary, e.g.,
 
-```{r order, eval=FALSE}
+```{r order}
 output1 <- distdiffr(data1,
                      data2,
                      testType = "toroidal",
@@ -104,7 +104,7 @@ output1$pval == output2$pval
 
 Below demonstrates test results when the null hypothesis is false (i.e., there exists some difference between the two distributions). This is shown by separating the two samples by the species setosa and virginica, respectively.
 
-```{r nullFalse, eval=FALSE}
+```{r nullFalse}
 data(iris)
 data1 <- as.matrix(iris[iris[5] == "setosa", -(3:5)])
 data2 <- as.matrix(iris[iris[5] == "virginica", -(3:5)])
