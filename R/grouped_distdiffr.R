@@ -26,8 +26,6 @@ grouped_distdiffr <- function(aggdata1,
                               numPerms = 99,
                               psiFun = CalcGroupPsiCWS,
                               seedNum = NULL) {
-  set.seed(seedNum)
-
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
   subjNums1 <- aggdata1[, 3]
   subjNums2 <- aggdata2[, 3]
@@ -78,6 +76,8 @@ grouped_distdiffr <- function(aggdata1,
       duplRowsInd <- aggdata1DuplRowsWaggdata2(aggdata1, aggdata2)
     }
   }
+
+  set.seed(seedNum)
 
   data <- rbind(aggdata1, aggdata2)
   srtDatOrdr <- order(data[, 1], data[, 2])

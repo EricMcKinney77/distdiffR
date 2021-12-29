@@ -28,8 +28,6 @@ distdiffr <- function(data1,
                       numPerms = 999,
                       psiFun = CalcPsiCWS,
                       seedNum = NULL) {
-  set.seed(seedNum)
-
   ## Combines the data from two subjects into one long matrix.
   n1 <- nrow(data1)
   n2 <- nrow(data2)
@@ -72,6 +70,8 @@ distdiffr <- function(data1,
       duplRowsInd <- data1DuplRowsWdata2(data1, data2)
     }
   }
+
+  set.seed(seedNum)
 
   data <- rbind(data1, data2)
   srtDatOrdr <- order(data[, 1], data[, 2])

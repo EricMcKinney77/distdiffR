@@ -21,6 +21,13 @@ output <- distdiffr(data1,
                     seedNum = seedNum)
 output$pval == 0.561
 
+# Order does not matter
+output2 <- distdiffr(data2,
+                     data1,
+                     testType = "rotational",
+                     seedNum = seedNum)
+output2$pval == output$pval
+
 # Toroidal shift test with proportions of points
 output <- distdiffr(data1,
                     data2,
