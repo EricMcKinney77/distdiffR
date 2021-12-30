@@ -1,7 +1,7 @@
 ---
 title: "The distdiffR Vignette"
 author: "Eric McKinney"
-date: "2021-12-28"
+date: "2021-12-29"
 output:
   rmarkdown::html_document:
     toc: true

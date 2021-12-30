@@ -19,7 +19,7 @@ output <- distdiffr(data1,
                     data2,
                     testType = "rotational",
                     seedNum = seedNum)
-output$pval == 0.503
+output$pval == 0.58
 
 # Order does not matter
 output2 <- distdiffr(data2,
@@ -34,14 +34,14 @@ output <- distdiffr(data1,
                     testType = "toroidal",
                     propPnts = 0.1,
                     seedNum = seedNum)
-output$pval == 0.566
+output$pval == 0.449
 
 # Toroidal shift test with thresholds below pooled sample size
 output <- distdiffr(data1,
                     data2,
                     testType = "toroidal",
                     seedNum = seedNum)
-output$pval == 0.477
+output$pval == 0.5
 
 # Toroidal shift test with thresholds above pooled sample size
 output <- distdiffr(data1,
@@ -49,7 +49,7 @@ output <- distdiffr(data1,
                     testType = "toroidal",
                     shiftThrshld = 100,
                     seedNum = seedNum)
-output$pval == 0.502
+output$pval == 0.487
 
 # Toroidal shift test with a number of shifts
 output <- distdiffr(data1,
@@ -57,14 +57,14 @@ output <- distdiffr(data1,
                     testType = "toroidal",
                     numShifts = 8,
                     seedNum = seedNum)
-output$pval == 0.648
+output$pval == 0.531
 
 # Combined rotational and toroidal shift test
 output <- distdiffr(data1,
                     data2,
                     testType = "combined",
                     seedNum = seedNum)
-output$pval == 0.307
+output$pval == 0.331
 
 
 # Test when the null is false
