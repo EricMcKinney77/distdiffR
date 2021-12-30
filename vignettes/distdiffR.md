@@ -1,7 +1,7 @@
 ---
 title: "The distdiffR Vignette"
 author: "Eric McKinney"
-date: "2021-12-29"
+date: "2021-12-30"
 output:
   rmarkdown::html_document:
     toc: true
@@ -68,7 +68,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.561
+#> [1] 0.58
 ```
 
 Since the p-value (`pval`) is much larger than any reasonable significance level, the null is confidently rejected in favor of the null hypothesis, which is that these two samples have been drawn from the same distribution. When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed.
@@ -89,7 +89,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.566
+#> [1] 0.449
 ```
 
 ```r
@@ -103,7 +103,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.477
+#> [1] 0.5
 ```
 
 ```r
@@ -117,7 +117,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.502
+#> [1] 0.487
 ```
 
 ```r
@@ -131,7 +131,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.648
+#> [1] 0.531
 ```
 
 ```r
@@ -144,7 +144,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.307
+#> [1] 0.331
 ```
 ### Alternative test statistics
 
@@ -161,7 +161,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.254
+#> [1] 0.373
 ```
 
 ```r
@@ -174,7 +174,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.279
+#> [1] 0.416
 ```
 
 ```r
@@ -187,7 +187,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.307
+#> [1] 0.331
 ```
 
 ```r
@@ -200,7 +200,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.234
+#> [1] 0.441
 ```
 
 ```r
@@ -213,7 +213,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.263
+#> [1] 0.355
 ```
 
 ```r
@@ -226,7 +226,7 @@ output$pval
 ```
 
 ```
-#> [1] 0.347
+#> [1] 0.283
 ```
 
 ### Input order does not matter
@@ -247,7 +247,7 @@ output1$pval == output2$pval
 ```
 
 ```
-#> [1] FALSE
+#> [1] TRUE
 ```
 
 ## Application (when a difference exists)
@@ -400,18 +400,11 @@ Since the species is treated as a subject labeling, then each subject's contribu
 output <- grouped_distdiffr(sample1,
                             sample2,
                             seedNum = seedNum)
-```
-
-```
-#> [1] "Some data values were not unique between groups. Adding an insignificant amount of noise."
-```
-
-```r
 output$pval
 ```
 
 ```
-#> [1] 0.16
+#> [1] 0.23
 ```
 
 [^1]: Fisher, R. A., 1936. The use of multiple measurements in taxonomic problems. Annals of Eugenics, 7, Part II, pp. 179–188.
