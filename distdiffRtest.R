@@ -1,7 +1,7 @@
 # Check that the distdiffR tests are producing reasonable outputs.
 
 library(devtools)
-install_github("https://github.com/EricMcKinney77/distdiffR")
+install_github("https://github.com/EricMcKinney77/distdiffR", build_vignettes = TRUE)
 library(distdiffR)
 
 seedNum <- 123
