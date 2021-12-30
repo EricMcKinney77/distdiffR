@@ -19,7 +19,7 @@ output <- distdiffr(data1,
                     data2,
                     testType = "rotational",
                     seedNum = seedNum)
-output$pval == 0.561
+output$pval == 0.503
 
 # Order does not matter
 output2 <- distdiffr(data2,

@@ -31,7 +31,6 @@ distdiffr <- function(data1,
   ## Combines the data from two subjects into one long matrix.
   n1 <- nrow(data1)
   n2 <- nrow(data2)
-  subjects <- rep(1:2, times = c(n1, n2))
 
   # Check for conflict between propPnts and numShifts.
   noPropPnts <- is.null(propPnts)
@@ -44,39 +43,18 @@ distdiffr <- function(data1,
     noNumShifts <- FALSE
   }
 
-  # Check and remove duplicate data values between samples
-  data1DuplRowsWdata2 <- function(data1, data2) {
-    data1strgs <- unlist(sapply(1:n1, function(j) paste(data1[j, ], collapse = '_')))
-    data2strgs <- unlist(sapply(1:n2, function(j) paste(data2[j, ], collapse = '_')))
-    which(data1strgs %in% intersect(data1strgs, data2strgs))
-  }
-  duplRowsInd <- data1DuplRowsWdata2(data1, data2)
+  hash1 <- hashMat(data1)
+  hash2 <- hashMat(data2)
 
-  if (length(duplRowsInd) != 0) {
-    # Determine the number of significant digits that were used to record the data
-    decimalplaces <- function(x) {
-      if (abs(x - round(x)) > .Machine$double.eps^0.5) {
-        nchar(strsplit(sub('0+$', '', sprintf(fmt = "%f", x)), ".", fixed = TRUE)[[1]][[2]])
-      } else {
-        return(0)
-      }
-    }
-    numSigDigits <- max(mapply(decimalplaces, rbind(data1, data2)))
-    roundBound <- 5 * 10^(-(numSigDigits + 1))
-
-    # Keep adding small amounts of noise until data1 and data2 have no more duplicate rows
-    while (length(duplRowsInd) != 0) {
-      data1[duplRowsInd, ] <- data1[duplRowsInd, ] + runif(length(duplRowsInd) * 2, -roundBound, roundBound)
-      duplRowsInd <- data1DuplRowsWdata2(data1, data2)
-    }
+  if (hash1 >= hash2) {
+    data <- rbind(data1, data2)
+    subjects <- rep(1:2, times = c(n1, n2))
+  } else {
+    data <- rbind(data2, data1)
+    subjects <- rep(2:1, times = c(n2, n1))
   }
 
   set.seed(seedNum)
-
-  data <- rbind(data1, data2)
-  srtDatOrdr <- order(data[, 1], data[, 2])
-  data <- data[srtDatOrdr, ]
-  subjects <- subjects[srtDatOrdr]
 
   ## Center the data around the bivariate median of the combined data sets.
   medians <- apply(data, 2, median)

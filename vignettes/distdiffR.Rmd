@@ -284,8 +284,15 @@ legend(7, 2.2,
 Since the species is treated as a subject labeling, then each subject's contributions to the respective samples can be grouped and weighted such that each contribution is treated equally. For example, although `sample1` had `r sum(sample1[, 3] == 1)` Setosas, `r sum(sample1[, 3] == 2)` Virsicolors, and `r sum(sample1[, 3] == 3)` Virginicas, the contributions of each to the overall test statistic will be weighted equally. This is also true of `sample2`.
 
 ```{r, cache = TRUE}
+set.seed(321)
 output <- grouped_distdiffr(sample1,
                             sample2,
+                            seedNum = seedNum)
+output$pval
+
+set.seed(321)
+output <- grouped_distdiffr(sample2,
+                            sample1,
                             seedNum = seedNum)
 output$pval
 ```

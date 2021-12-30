@@ -29,7 +29,6 @@ grouped_distdiffr <- function(aggdata1,
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
   subjNums1 <- aggdata1[, 3]
   subjNums2 <- aggdata2[, 3]
-  subjNums <- c(subjNums1, subjNums2)
 
   aggdata1 <- aggdata1[, 1:2]
   aggdata2 <- aggdata2[, 1:2]
@@ -37,7 +36,6 @@ grouped_distdiffr <- function(aggdata1,
   # Combines the data from two subjects into one long matrix.
   n1 <- nrow(aggdata1)
   n2 <- nrow(aggdata2)
-  groupNums <- rep(1:2, times = c(n1, n2))
 
   # Check for conflict between propPnts and numShifts.
   noPropPnts <- is.null(propPnts)
@@ -50,40 +48,20 @@ grouped_distdiffr <- function(aggdata1,
     noNumShifts <- FALSE
   }
 
-  # Check and remove duplicate data values between samples
-  aggdata1DuplRowsWaggdata2 <- function(aggdata1, aggdata2) {
-    aggdata1strgs <- unlist(sapply(1:n1, function(j) paste(aggdata1[j, ], collapse = '_')))
-    aggdata2strgs <- unlist(sapply(1:n2, function(j) paste(aggdata2[j, ], collapse = '_')))
-    which(aggdata1strgs %in% intersect(aggdata1strgs, aggdata2strgs))
-  }
-  duplRowsInd <- aggdata1DuplRowsWaggdata2(aggdata1, aggdata2)
+  hash1 <- hashMat(aggdata1)
+  hash2 <- hashMat(aggdata2)
 
-  if (length(duplRowsInd) != 0) {
-    # Determine the number of significant digits that were used to record the data
-    decimalplaces <- function(x) {
-      if (abs(x - round(x)) > .Machine$double.eps^0.5) {
-        nchar(strsplit(sub('0+$', '', sprintf(fmt = "%f", x)), ".", fixed = TRUE)[[1]][[2]])
-      } else {
-        return(0)
-      }
-    }
-    numSigDigits <- max(mapply(decimalplaces, rbind(aggdata1, aggdata2)))
-    roundBound <- 5 * 10^(-(numSigDigits + 1))
-
-    # Keep adding small amounts of noise until aggdata1 and aggdata2 have no more duplicate rows
-    while (length(duplRowsInd) != 0) {
-      aggdata1[duplRowsInd, ] <- aggdata1[duplRowsInd, ] + runif(length(duplRowsInd) * 2, -roundBound, roundBound)
-      duplRowsInd <- aggdata1DuplRowsWaggdata2(aggdata1, aggdata2)
-    }
+  if (hash1 >= hash2) {
+    data <- rbind(aggdata1, aggdata2)
+    groupNums <- rep(1:2, times = c(n1, n2))
+    subjNums <- c(subjNums1, subjNums2)
+  } else {
+    data <- rbind(aggdata2, aggdata1)
+    groupNums <- rep(2:1, times = c(n2, n1))
+    subjNums <- c(subjNums2, subjNums1)
   }
 
   set.seed(seedNum)
-
-  data <- rbind(aggdata1, aggdata2)
-  srtDatOrdr <- order(data[, 1], data[, 2])
-  data <- data[srtDatOrdr, ]
-  subjNums <- subjNums[srtDatOrdr]
-  groupNums <- groupNums[srtDatOrdr]
 
   ## Center the data around the bivariate median of the combined data sets.
   medians <- apply(data, 2, median)
