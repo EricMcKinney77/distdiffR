@@ -71,7 +71,7 @@ output$pval
 #> [1] 0.58
 ```
 
-Since the p-value (`pval`) is much larger than any reasonable significance level, the null is confidently rejected in favor of the null hypothesis, which is that these two samples have been drawn from the same distribution. When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed.
+Since the p-value (`pval`) is much larger than any acceptable significance level, it would not be reasonable to reject the null hypothesis, which is that these two samples have been drawn from the same distribution. When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed.
 
 ### Test modifications
 

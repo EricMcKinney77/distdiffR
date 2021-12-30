@@ -59,7 +59,7 @@ legend(7, 2.2,
 ```
 
 
-```{r}
+```{r, cache = TRUE}
 # Rotational test
 output <- distdiffr(sample1, # Note: Data inputs must be matrices
                     sample2,
@@ -68,13 +68,13 @@ output <- distdiffr(sample1, # Note: Data inputs must be matrices
 output$pval
 ```
 
-Since the p-value (`pval`) is much larger than any reasonable significance level, the null is confidently rejected in favor of the null hypothesis, which is that these two samples have been drawn from the same distribution. When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed.
+Since the p-value (`pval`) is much larger than any acceptable significance level, it would not be reasonable to reject the null hypothesis, which is that these two samples have been drawn from the same distribution. When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed.
 
 ### Test modifications
 
 Similar results are also shown for the more powerful toroidal and combined (rotational and toroidal) modified Syrjala tests[^3]:
 
-```{r}
+```{r, cache = TRUE}
 # Toroidal shift test with proportions of points
 output <- distdiffr(sample1,
                     sample2,
@@ -118,7 +118,7 @@ output$pval
 
 Six alternative statistics are available for each type of test. However, as seen here, the choice among these statistics has been shown to make little difference on the test results[^3].
 
-```{r}
+```{r, cache = TRUE}
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined",
@@ -166,7 +166,7 @@ output$pval
 
 Additionally, for any of the above tests, the data input order is arbitrary, e.g.,
 
-```{r}
+```{r, cache = TRUE}
 output1 <- distdiffr(sample1,
                      sample2,
                      seedNum = seedNum)
@@ -205,7 +205,7 @@ legend(6.6, 2.2,
 
 Indeed, the difference between the two samples results in minimal p-values among all of the test types.
 
-```{r}
+```{r, cache = TRUE}
 # Rotational test
 output <- distdiffr(sample1,
                     sample2,
@@ -283,7 +283,7 @@ legend(7, 2.2,
 
 Since the species is treated as a subject labeling, then each subject's contributions to the respective samples can be grouped and weighted such that each contribution is treated equally. For example, although `sample1` had `r sum(sample1[, 3] == 1)` Setosas, `r sum(sample1[, 3] == 2)` Virsicolors, and `r sum(sample1[, 3] == 3)` Virginicas, the contributions of each to the overall test statistic will be weighted equally. This is also true of `sample2`.
 
-```{r}
+```{r, cache = TRUE}
 output <- grouped_distdiffr(sample1,
                             sample2,
                             seedNum = seedNum)
