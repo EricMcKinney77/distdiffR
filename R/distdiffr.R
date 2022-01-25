@@ -33,14 +33,28 @@ distdiffr <- function(data1,
   n2 <- nrow(data2)
 
   # Check for conflict between propPnts and numShifts.
-  noPropPnts <- is.null(propPnts)
-  noNumShifts <- is.null(numShifts)
+  usePropPnts <- !is.null(propPnts)
+  useNumShifts <- !is.null(numShifts)
   n_pooled <- n1 + n2
-  if (!noPropPnts & !noNumShifts) {
+  if (usePropPnts & useNumShifts) {
     stop("Must provide either propPnts or numShifts, but not both.")
-  } else if (noPropPnts & noNumShifts) { # Use either numShifts or set using shiftThrshld.
-    numShifts <- ifelse(n_pooled > shiftThrshld, shiftThrshld, n_pooled)
-    noNumShifts <- FALSE
+  } else if (!usePropPnts & useNumShifts) { # Use numShifts instead of shiftThrshld.
+    warning("Using numShifts instead of default shiftThrshld.")
+    shiftThrshld <- NULL
+    if (n_pooled < numShifts) {
+      stop("n_pooled is smaller than numShifts.")
+    }
+  } else if (usePropPnts & !useNumShifts) { # Use propPnts and instead of shiftThrshld.
+    print("Using propPnts instead of default shiftThrshld.")
+    shiftThrshld <- NULL
+  } else if (!usePropPnts & !useNumShifts) { # Use default shiftThrshld.
+    if (n_pooled < shiftThrshld) {
+      warning("n_pooled is smaller than shiftThrshld.\nCan only compute n_pooled toroidal shifts.")
+      numShifts <- n_pooled
+    } else {
+      numShifts <- shiftThrshld
+    }
+    useNumShifts <- TRUE
   }
 
   hash1 <- hashMat(data1)
@@ -66,9 +80,9 @@ distdiffr <- function(data1,
 
     if (testType == "combined") {
       ## Applies toroidal shifts to the data and stores the shifted data frames in a list.
-      if (!noPropPnts) {
+      if (usePropPnts) {
         lstOfRotShiftDataLists <- lapply(rotDataList, PropToroShiftData, n1, n2, propPnts)
-      } else if (!noNumShifts) {
+      } else if (useNumShifts) {
         lstOfRotShiftDataLists <- lapply(rotDataList, NumToroShiftData, n1, n2, numShifts)
       }
 
@@ -94,9 +108,9 @@ distdiffr <- function(data1,
       }
     }
   } else if (testType == "toroidal") {
-    if (!noPropPnts) {
+    if (usePropPnts) {
       shiftDataList <- PropToroShiftData(data, n1, n2, propPnts)
-    } else if (!noNumShifts) {
+    } else if (useNumShifts) {
       shiftDataList <- NumToroShiftData(data, n1, n2, numShifts)
     }
 
