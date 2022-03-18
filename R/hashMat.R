@@ -9,6 +9,13 @@
 #'
 #' @return A numeric hash value
 #' @export
+#' @examples
+#' data(iris)
+#' sample1 <- as.matrix(iris[iris$Species == "virginica", 1:2])
+#' sample2 <- as.matrix(iris[iris$Species == "versicolor", 1:2])
+#'
+#' hashMat(sample1)
+#' hashMat(sample2)
 hashMat <- function(mat) {
   # Normalize the data
   matMins <- apply(mat, 2, min)

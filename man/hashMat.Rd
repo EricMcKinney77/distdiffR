@@ -18,3 +18,11 @@ matrices for the purpose of providing identical test results regardless of
 the order in which the input data is passed to the \code{distdiffr()} or
 \code{grouped_distdiffr()} functions.
 }
+\examples{
+data(iris)
+sample1 <- as.matrix(iris[iris$Species == "virginica", 1:2])
+sample2 <- as.matrix(iris[iris$Species == "versicolor", 1:2])
+
+hashMat(sample1)
+hashMat(sample2)
+}
