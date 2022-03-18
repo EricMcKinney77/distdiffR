@@ -1,4 +1,21 @@
-#' The combined rotational and toroidal shift distDiffR test for aggregated group data
+#' The combined rotational and toroidal shift distdiffR test for aggregated group data
+#'
+#' The `grouped_distdiffr()` function conducts two-sample permutation tests of
+#' distributional equality based on differences in the bivariate empirical
+#' cumulative density functions (BECDFs). The differences in BECDFs are computed
+#' across a series of rotations, toroidal shifts, or both rotations and toroidal
+#' shifts of the combined data (specified via `testType`). The number of rotations
+#' and toroidal shifts may be specified (via `numRot` or `numShifts`,
+#' respectively). The number of toroidal shifts may also be determined by a
+#' proportion of the combined sample size (via `propPnts`).
+#'
+#' Additionally, `grouped_distdiffr()` assumes multiple sources (subjects) are
+#' contributing to each sample. As such, the function weights each sources
+#' contribution as to treat each equally within the samples, respectively.
+#' However, this test is only currently available with the grouped CWS statistic
+#' and employs both rotational and toroidal shifts. For more information, see
+#' \insertCite{mckinney2022extensions;textual}{distdiffR} and
+#' \insertCite{mckinney2021extensions;textual}{distdiffR}.
 #'
 #' @param aggdata1 A three column matrix of bivariate observations from one sample with the third column being the numeric subject labels
 #' @param aggdata2 A three column matrix of bivariate observations from another sample with the third column being the numeric subject labels
@@ -17,6 +34,27 @@
 #' @importFrom stats runif
 #' @importFrom stats median
 #' @export
+#' @references
+#' \insertRef{mckinney2022extensions}{distdiffR}
+#'
+#' \insertRef{mckinney2021extensions}{distdiffR}
+#' @examples
+#' # Randomly assign all three species to two samples
+#' # The species serve as subject labels within each sample
+#' seedNum <- 123
+#' set.seed(seedNum)
+#'
+#' data(iris)
+#' irisPermuted <- iris
+#' irisPermuted$Species <- rep(1:3, each = 50)
+#' irisPermuted <- irisPermuted[sample.int(nrow(irisPermuted)), ]
+#' sample1 <- as.matrix(irisPermuted[1:75, c(1:2, 5)])
+#' sample2 <- as.matrix(irisPermuted[76:150, c(1:2, 5)])
+#'
+#' output <- grouped_distdiffr(sample1,
+#'                             sample2,
+#'                             seedNum = seedNum)
+#' output$pval
 grouped_distdiffr <- function(aggdata1,
                               aggdata2,
                               numRot = 8,

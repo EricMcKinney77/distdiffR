@@ -2,7 +2,7 @@
 % Please edit documentation in R/CalcPsiUWA.R
 \name{CalcPsiUWA}
 \alias{CalcPsiUWA}
-\title{The Psi_UWA Statistic}
+\title{The Psi UWA Statistic}
 \usage{
 CalcPsiUWA(data, subjects)
 }
@@ -12,9 +12,24 @@ CalcPsiUWA(data, subjects)
 \item{subjects}{a numerical vector of sample labels (use either 1 or 2)}
 }
 \value{
-the Psi_UWA statistic
+the Psi UWA statistic
 }
 \description{
 This statistic computes the uniformly weighted absolute (UWA) differences between
 the empirical cumulative distribution functions for the two samples.
+For more information, see \insertCite{mckinney2022extensions;textual}{distdiffR}
+and \insertCite{mckinney2021extensions;textual}{distdiffR}.
+}
+\examples{
+data(iris)
+pooled_data <- iris[iris$Species \%in\% c("setosa", "virginica"), 1:2]
+sample_labels <- rep(1:2, c(sum(iris$Species == "setosa"),
+                            sum(iris$Species == "virginica")))
+
+CalcPsiUWA(as.matrix(pooled_data), sample_labels)
+}
+\references{
+\insertRef{mckinney2022extensions}{distdiffR}
+
+\insertRef{mckinney2021extensions}{distdiffR}
 }

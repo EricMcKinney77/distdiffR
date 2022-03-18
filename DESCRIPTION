@@ -22,7 +22,9 @@ LinkingTo:
     Rcpp
 Imports: 
     Rcpp,
-    stats
+    stats,
+    Rdpack
+RdMacros: Rdpack
 SystemRequirements: GNU make
 Suggests: 
     rmarkdown,

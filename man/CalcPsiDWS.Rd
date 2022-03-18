@@ -2,7 +2,7 @@
 % Please edit documentation in R/CalcPsiDWS.R
 \name{CalcPsiDWS}
 \alias{CalcPsiDWS}
-\title{The Psi_DWS Statistic}
+\title{The Psi DWS Statistic}
 \usage{
 CalcPsiDWS(data, subjects)
 }
@@ -12,9 +12,24 @@ CalcPsiDWS(data, subjects)
 \item{subjects}{a numerical vector of sample labels (use either 1 or 2)}
 }
 \value{
-the Psi_DWS statistic
+the Psi DWS statistic
 }
 \description{
 This statistic computes the double weighted squared (DWS) differences between
-the empirical cumulative distribution functions for the two samples.
+the empirical cumulative distribution functions for the two samples. For more
+information, see \insertCite{mckinney2022extensions;textual}{distdiffR} and
+\insertCite{mckinney2021extensions;textual}{distdiffR}.
+}
+\examples{
+data(iris)
+pooled_data <- iris[iris$Species \%in\% c("setosa", "virginica"), 1:2]
+sample_labels <- rep(1:2, c(sum(iris$Species == "setosa"),
+                            sum(iris$Species == "virginica")))
+
+CalcPsiDWS(as.matrix(pooled_data), sample_labels)
+}
+\references{
+\insertRef{mckinney2022extensions}{distdiffR}
+
+\insertRef{mckinney2021extensions}{distdiffR}
 }

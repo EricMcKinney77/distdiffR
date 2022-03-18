@@ -2,7 +2,7 @@
 % Please edit documentation in R/CalcPsiDWA.R
 \name{CalcPsiDWA}
 \alias{CalcPsiDWA}
-\title{The Psi_DWA Statistic}
+\title{The Psi DWA Statistic}
 \usage{
 CalcPsiDWA(data, subjects)
 }
@@ -12,9 +12,24 @@ CalcPsiDWA(data, subjects)
 \item{subjects}{a numerical vector of sample labels (use either 1 or 2)}
 }
 \value{
-the Psi_DWA statistic
+the Psi DWA statistic
 }
 \description{
 This statistic computes the double weighted absolute (DWA) differences between
 the empirical cumulative distribution functions for the two samples.
+For more information, see \insertCite{mckinney2022extensions;textual}{distdiffR}
+and \insertCite{mckinney2021extensions;textual}{distdiffR}.
+}
+\examples{
+data(iris)
+pooled_data <- iris[iris$Species \%in\% c("setosa", "virginica"), 1:2]
+sample_labels <- rep(1:2, c(sum(iris$Species == "setosa"),
+                            sum(iris$Species == "virginica")))
+
+CalcPsiDWA(as.matrix(pooled_data), sample_labels)
+}
+\references{
+\insertRef{mckinney2022extensions}{distdiffR}
+
+\insertRef{mckinney2021extensions}{distdiffR}
 }

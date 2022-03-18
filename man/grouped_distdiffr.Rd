@@ -2,7 +2,7 @@
 % Please edit documentation in R/grouped_distdiffr.R
 \name{grouped_distdiffr}
 \alias{grouped_distdiffr}
-\title{The combined rotational and toroidal shift distDiffR test for aggregated group data}
+\title{The combined rotational and toroidal shift distdiffR test for aggregated group data}
 \usage{
 grouped_distdiffr(
   aggdata1,
@@ -42,5 +42,44 @@ A list including three objects:
 (3) the p-value for the test
 }
 \description{
-The combined rotational and toroidal shift distDiffR test for aggregated group data
+The \code{grouped_distdiffr()} function conducts two-sample permutation tests of
+distributional equality based on differences in the bivariate empirical
+cumulative density functions (BECDFs). The differences in BECDFs are computed
+across a series of rotations, toroidal shifts, or both rotations and toroidal
+shifts of the combined data (specified via \code{testType}). The number of rotations
+and toroidal shifts may be specified (via \code{numRot} or \code{numShifts},
+respectively). The number of toroidal shifts may also be determined by a
+proportion of the combined sample size (via \code{propPnts}).
+}
+\details{
+Additionally, \code{grouped_distdiffr()} assumes multiple sources (subjects) are
+contributing to each sample. As such, the function weights each sources
+contribution as to treat each equally within the samples, respectively.
+However, this test is only currently available with the grouped CWS statistic
+and employs both rotational and toroidal shifts. For more information, see
+\insertCite{mckinney2022extensions;textual}{distdiffR} and
+\insertCite{mckinney2021extensions;textual}{distdiffR}.
+}
+\examples{
+# Randomly assign all three species to two samples
+# The species serve as subject labels within each sample
+seedNum <- 123
+set.seed(seedNum)
+
+data(iris)
+irisPermuted <- iris
+irisPermuted$Species <- rep(1:3, each = 50)
+irisPermuted <- irisPermuted[sample.int(nrow(irisPermuted)), ]
+sample1 <- as.matrix(irisPermuted[1:75, c(1:2, 5)])
+sample2 <- as.matrix(irisPermuted[76:150, c(1:2, 5)])
+
+output <- grouped_distdiffr(sample1,
+                            sample2,
+                            seedNum = seedNum)
+output$pval
+}
+\references{
+\insertRef{mckinney2022extensions}{distdiffR}
+
+\insertRef{mckinney2021extensions}{distdiffR}
 }

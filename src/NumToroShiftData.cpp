@@ -3,11 +3,29 @@ using namespace Rcpp;
 
 //' Apply a toroidal shift to the pooled samples using a number of points
 //'
+//' The `NumToroShiftData()` function produces a list of toroidal shifted
+//' versions of the two-column input matrix. The number of toroidal shifts
+//' is an integer passed to `numShifts`. The origins of the toroidal shifts are
+//' randomly selected from the combined samples. The pooled `data` is assumed to
+//' list all of the first sample of size `n1` before the second sample (of size
+//' `n2`).
+//'
 //' @param data A two column matrix of the pooled samples
 //' @param n1 An integer sample size for the first sample
 //' @param n2 An integer sample size for the second sample
 //' @param numShifts A numeric number of points to be used as toroidal shift origins
-//' @return A two column matrix of the shifted pooled samples
+//' @return A list of toroidal shifted pooled sample matrices
+//' @examples
+//' data(iris)
+//' sample1 <- as.matrix(iris[iris$Species == "setosa", 1:2])
+//' sample2 <- as.matrix(iris[iris$Species == "virginica", 1:2])
+//' pooled_data <- rbind(sample1, sample2)
+//' n1 <- nrow(sample1)
+//' n2 <- nrow(sample2)
+//'
+//' # Create a list of five toroidal shifts of the pooled data
+//' output <- NumToroShiftData(pooled_data, n1, n2, 25)
+//' summary(output)
 //' @export
 // [[Rcpp::export]]
 List NumToroShiftData(NumericMatrix data, int n1, int n2, int numShifts) {

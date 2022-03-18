@@ -1,12 +1,21 @@
 #' Create rotated versions of the data
 #'
-#' This function creates rotated versions of the pooled samples
+#' This function produces a list of rotated versions of the two-column input
+#' matrix. Specifically, the number of rotations (i.e., an integer passed to
+#' `numRotations`) divides a complete circle into `numRotations` equal angles,
+#' and `numRotations` rotated versions of the input data are output in a list.
 #'
-#' @param data a two column matrix of the bivariate pooled samples
-#' @param numRotations a non-negative integer specifying the number of rotations to be applied to the data within 360 degrees.
+#' @param data A two column matrix of the bivariate combined samples
+#' @param numRotations A non-negative integer specifying the number of rotations to be applied to the data within 360 degrees.
 #'
-#' @return a list of matrices containing the coordinates for each version of the rotated data (including the original data)
+#' @return A list of matrices containing the coordinates for each version of the rotated data (including the original data, which is the first matrix of the list)
 #' @export
+#' @examples
+#' data(iris)
+#' sample1 <- as.matrix(iris[iris$Species == "setosa", 1:2])
+#'
+#' # Generate five rotated versions of sample1 (every 72 degrees) within 360 degrees.
+#' RotateData(sample1, 5)
 RotateData <- function(data, numRotations) {
   rotDataList <- vector("list", length = numRotations)
   rotDataList[[1]] <- data

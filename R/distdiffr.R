@@ -1,4 +1,20 @@
-#' The distdiffr test
+#' The distdiffR two-sample tests of bivariate distributional equality
+#'
+#' The `distdiffr()` function conducts two-sample permutation tests of
+#' distributional equality based on differences in the bivariate empirical
+#' cumulative density functions (BECDFs). The differences in BECDFs are computed
+#' across a series of rotations, toroidal shifts, or both rotations and toroidal
+#' shifts of the combined data (specified via `testType`). The number of rotations
+#' and toroidal shifts may be specified (via `numRot` or `numShifts`,
+#' respectively). The number of toroidal shifts may also be determined by a
+#' proportion of the combined sample size (via `propPnts`). However,
+#' \insertCite{mckinney2022extensions;textual}{distdiffR} has shown that
+#' limiting the number of toroidal shifts to ease the computational load of the
+#' test will still provide stable results. Simulations have shown the combined
+#' rotational and toroidal shift test to be the most powerful yet appropriately
+#' conservative test. For more information, see
+#' \insertCite{mckinney2022extensions;textual}{distdiffR} and
+#' \insertCite{mckinney2021extensions;textual}{distdiffR}.
 #'
 #' @param data1 A two column matrix of bivariate observations from one sample.
 #' @param data2 A two column matrix of bivariate observations from another sample.
@@ -17,7 +33,74 @@
 #'     (3) the p-value for the test
 #' @importFrom stats runif
 #' @importFrom stats median
+#' @importFrom Rdpack reprompt
 #' @export
+#' @references
+#' \insertRef{mckinney2022extensions}{distdiffR}
+#'
+#' \insertRef{mckinney2021extensions}{distdiffR}
+#' @examples
+#' # Randomly assign all three species to two samples
+#' seedNum <- 123
+#' set.seed(seedNum)
+#'
+#' data(iris)
+#' # Randomly assign all three species to two samples
+#' irisPermuted <- iris[sample.int(nrow(iris)), ]
+#' sample1 <- as.matrix(irisPermuted[1:75, 1:2])
+#' sample2 <- as.matrix(irisPermuted[76:150, 1:2])
+#' pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
+#'
+#' # Rotational test
+#' output <- distdiffr(sample1, # Note: Data inputs must be matrices
+#'                     sample2,
+#'                     testType = "rotational",
+#'                     numRot = 8, # Default value
+#'                     seedNum = seedNum)
+#' output$pval
+#'
+#'# Toroidal shift test with proportions of points
+#' output <- distdiffr(sample1,
+#'                     sample2,
+#'                     testType = "toroidal",
+#'                     propPnts = 0.1,
+#'                     seedNum = seedNum)
+#' output$pval
+#'
+#' # Toroidal shift test with a threshold below pooled sample size
+#' output <- distdiffr(sample1,
+#'                     sample2,
+#'                     testType = "toroidal",
+#'                     shiftThrshld = 25, # Default
+#'                     seedNum = seedNum)
+#' output$pval
+#'
+#' # Toroidal shift test with a threshold above pooled sample size
+#' output <- distdiffr(sample1,
+#'                     sample2,
+#'                     testType = "toroidal",
+#'                     shiftThrshld = 200,
+#'                     seedNum = seedNum)
+#' output$pval
+#'
+#' # Toroidal shift test with a number of shifts
+#' output <- distdiffr(sample1,
+#'                     sample2,
+#'                     testType = "toroidal",
+#'                     numShifts = 8,
+#'                     seedNum = seedNum)
+#' output$pval
+#'
+#' # Combined rotational and toroidal shift test
+#' output <- distdiffr(sample1,
+#'                     sample2,
+#'                     testType = "combined", # Default
+#'                     numRot = 8,            # Default
+#'                     shiftThrshld = 25,     # Default
+#'                     seedNum = seedNum)
+#' output$pval
+#'
+#' # Also see browseVignettes(package = "distdiffR")
 distdiffr <- function(data1,
                       data2,
                       testType = "combined",

@@ -1,11 +1,20 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Construct and compute bivariate cumulative distribution function values
+//' Construct and evaluate a bivariate empirical cumulative distribution function
 //'
-//' @param data A two column matrix for constructing the empirical bivariate cumulative distribution function (EBCDF)
-//' @param eval A two column matrix for input into the EBCDF
-//' @return A numeric vector of output values from the EBCDF
+//' Construct a bivariate empirical cumulative distribution function (BECDF)
+//' using `data` and pass each of the `eval` points through the BECDF.
+//'
+//' @param data A two column matrix for constructing the BECDF
+//' @param eval A two column matrix for input into the BECDF
+//' @return A numeric vector of output values from the BECDF
+//' @examples
+//' data(iris)
+//' sample1 <- as.matrix(iris[iris$Species == "virginica", 1:2])
+//' sample2 <- as.matrix(iris[iris$Species == "versicolor", 1:2])
+//'
+//' bcdf(sample1, sample2)
 //' @export
 // [[Rcpp::export]]
 NumericVector bcdf(NumericMatrix data, NumericMatrix eval) {

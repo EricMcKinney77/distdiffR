@@ -13,5 +13,8 @@ hashMat(mat)
 A numeric hash value
 }
 \description{
-Assigns a hash value to a two-column matrix.
+The \code{hashMat()} function assigns hash numbers to the two-column sample
+matrices for the purpose of providing identical test results regardless of
+the order in which the input data is passed to the \code{distdiffr()} or
+\code{grouped_distdiffr()} functions.
 }

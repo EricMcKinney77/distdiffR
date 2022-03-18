@@ -50,6 +50,9 @@ use_r("fbind")
 # (12) Use document() to publish the documentation to the man folder using Roxygen
 devtools::document()
 
+# Use build_manual() after updating the Rd document files to produce a pdf manual
+devtools::build_manual()
+
 # (13) Check and commit again
 
 

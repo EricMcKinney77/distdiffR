@@ -1,5 +1,10 @@
 #' Assigns a hash value to a two-column matrix.
 #'
+#' The `hashMat()` function assigns hash numbers to the two-column sample
+#' matrices for the purpose of providing identical test results regardless of
+#' the order in which the input data is passed to the `distdiffr()` or
+#' `grouped_distdiffr()` functions.
+#'
 #' @param mat A two column matrix of bivariate observations.
 #'
 #' @return A numeric hash value

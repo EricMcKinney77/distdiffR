@@ -2,18 +2,26 @@
 % Please edit documentation in R/RcppExports.R
 \name{bcdf}
 \alias{bcdf}
-\title{Construct and compute bivariate cumulative distribution function values}
+\title{Construct and evaluate a bivariate empirical cumulative distribution function}
 \usage{
 bcdf(data, eval)
 }
 \arguments{
-\item{data}{A two column matrix for constructing the empirical bivariate cumulative distribution function (EBCDF)}
+\item{data}{A two column matrix for constructing the BECDF}
 
-\item{eval}{A two column matrix for input into the EBCDF}
+\item{eval}{A two column matrix for input into the BECDF}
 }
 \value{
-A numeric vector of output values from the EBCDF
+A numeric vector of output values from the BECDF
 }
 \description{
-Construct and compute bivariate cumulative distribution function values
+Construct a bivariate empirical cumulative distribution function (BECDF)
+using \code{data} and pass each of the \code{eval} points through the BECDF.
+}
+\examples{
+data(iris)
+sample1 <- as.matrix(iris[iris$Species == "virginica", 1:2])
+sample2 <- as.matrix(iris[iris$Species == "versicolor", 1:2])
+
+bcdf(sample1, sample2)
 }

@@ -13,22 +13,31 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include = FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
   comment = "#>"
 )
+error_hook <- knitr::knit_hooks$get("error")
+knitr::knit_hooks$set(error = function(x, options) {
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  error_hook(x, options)
+})
 ```
 
 ## Overview
 
 `distdiffR` is an R package for bivariate two-sample tests of distributional equality.
 
-The package provides a collection of nonparametric permutation tests for distributional equality. The tests make use of statistics between empirical cumulative distribution functions averaged across a series of rotations and or toroidal shifts of the pooled samples. The variety of tests with their respective parameters can be called from the main function `distdiffr()`. It takes as input two bivariate samples (not necessarily the same size) in the form of two-column matrices.
+The package provides a collection of nonparametric permutation tests for distributional equality. The tests make use of statistics between empirical cumulative distribution functions averaged across a series of rotations and / or toroidal shifts of the pooled samples. The variety of tests with their respective parameters can be called from the main function `distdiffr()`. It takes as input two bivariate samples (not necessarily the same size) in the form of two-column matrices.
 
 ## Application (when no difference exists)
 
-Below is an example using Fisher's Iris data[^1] to show test results when the null hypotheses are true (and both distributions are equivalent). This is done by randomly assigning all three of the species of iris to two samples. Since this is a bivariate test of distributional equality, only the first two independent variables are used.
+Below is an example using Fisher's Iris data[^1] to show test results when the null hypotheses are true (and both distributions are equivalent). This is done by randomly assigning all three of the species of iris to two samples. Since `distdiffr()` employs bivariate tests of distributional equality, only the first two independent variables from the Iris data are used.
 
 ```{r, fig.align = 'center'}
 library(distdiffR)
@@ -38,9 +47,9 @@ set.seed(seedNum)
 
 data(iris)
 # Randomly assign all three species to two samples
-iris <- iris[sample.int(nrow(iris)), ]
-sample1 <- as.matrix(iris[1:75, 1:2])
-sample2 <- as.matrix(iris[76:150, 1:2])
+irisPermuted <- iris[sample.int(nrow(iris)), ]
+sample1 <- as.matrix(irisPermuted[1:75, 1:2])
+sample2 <- as.matrix(irisPermuted[76:150, 1:2])
 pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
 
 plot(pooled_data[, 1],
@@ -64,11 +73,24 @@ legend(7, 2.2,
 output <- distdiffr(sample1, # Note: Data inputs must be matrices
                     sample2,
                     testType = "rotational",
+                    numRot = 8, # Default value
                     seedNum = seedNum)
 output$pval
 ```
 
-Since the p-value (`pval`) is much larger than any acceptable significance level, it would not be reasonable to reject the null hypothesis, which is that these two samples have been drawn from the same distribution. When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed.
+When `testType = "rotational"`, McKinney and Symanzik's rotational modified Syrjala test[^2] is being employed. Since the p-value (`output$pval`) is much larger than any acceptable significance level, it would not be reasonable to reject the null hypothesis, which is that these two samples have been drawn from the same distribution.
+
+Although simulations have suggested that the default eight number of rotations is sufficient, a different number may be passed to the `numRot` argument.
+
+```{r, cache = TRUE}
+# Rotational test with 50 rotations
+output <- distdiffr(sample1, # Note: Data inputs must be matrices
+                    sample2,
+                    testType = "rotational",
+                    numRot = 50,
+                    seedNum = seedNum)
+output$pval
+```
 
 ### Test modifications
 
@@ -83,7 +105,7 @@ output <- distdiffr(sample1,
                     seedNum = seedNum)
 output$pval
 
-# Toroidal shift test with thresholds below pooled sample size
+# Toroidal shift test with a threshold below pooled sample size
 output <- distdiffr(sample1,
                     sample2,
                     testType = "toroidal",
@@ -91,11 +113,11 @@ output <- distdiffr(sample1,
                     seedNum = seedNum)
 output$pval
 
-# Toroidal shift test with thresholds above pooled sample size
+# Toroidal shift test with a threshold above pooled sample size
 output <- distdiffr(sample1,
                     sample2,
                     testType = "toroidal",
-                    shiftThrshld = 100,
+                    shiftThrshld = 200,
                     seedNum = seedNum)
 output$pval
 
@@ -106,31 +128,120 @@ output <- distdiffr(sample1,
                     numShifts = 8,
                     seedNum = seedNum)
 output$pval
+```
 
+When employing the test which uses the combined rotational and toroidal shift modifications (which is the default argument for `testType`) the default behavior of the test is to use eight rotations and threshold the number of toroidal shifts to 25. If the combined sample size is less than the threshold, then the test will compute one toroidal shift per point (for each rotation).
+
+```{r, cache = TRUE}
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined", # Default
+                    numRot = 8,            # Default
+                    shiftThrshld = 25,     # Default
                     seedNum = seedNum)
 output$pval
 ```
+
+Alternatively, a proportion of the combined sample size may be specified for the test to determine the number of toroidal shifts (similar to the non-rotational toroidal shift test). If the proportion times the combined sample size is not an integer, the ceiling is taken to specify the number of toroidal shifts per rotation. Here, the proportion 0.1 multiplied to the combined sample size of 150 will result in 15 toroidal shifts per rotation. This will override the default behavior to use the `shiftThrshld` argument to limit the number of toroidal shifts.
+
+```{r, cache = TRUE}
+# Combined rotational and toroidal shift test
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined", # Default
+                    numRot = 8,            # Default
+                    propPnts = 0.1,
+                    seedNum = seedNum)
+output$pval
+```
+
+Or, a specific number of toroidal shifts my be passed to `numShifts`. This will also override the default behavior to use the `shiftThrshld` argument to limit the number of toroidal shifts.
+
+```{r, cache = TRUE}
+# Combined rotational and toroidal shift test
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined", # Default
+                    numRot = 8,            # Default
+                    numShifts = 10,
+                    seedNum = seedNum)
+output$pval
+```
+
+However, the number of toroidal shifts must be less than the combined sample size.
+
+```{r, cache = TRUE, error = TRUE}
+# Error: number of shifts larger than the combined sample sizes!
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined", # Default
+                    numRot = 8,            # Default
+                    numShifts = 151,
+                    seedNum = seedNum)
+```
+
+Also, `distdiffr()` will not allow arguments to be passed to more than one of `propPnts` or `numShifts`.
+
+```{r, cache = TRUE, error = TRUE, linewidth = 90}
+options(width = 60)
+# Error: Must provide either propPnts or numShifts, but not both.
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined", # Default
+                    numRot = 8,            # Default
+                    propPnts = 0.1,
+                    numShifts = 10,
+                    seedNum = seedNum)
+```
+
+Specifying a different number of rotations may also be combined with the above options for toroidal shifts.
+
+```{r, cache = TRUE}
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined",
+                    numRot = 10,
+                    shiftThrshld = 25,
+                    seedNum = seedNum)
+output$pval
+
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined",
+                    numRot = 10,
+                    propPnts = 0.1,
+                    seedNum = seedNum)
+output$pval
+
+output <- distdiffr(sample1,
+                    sample2,
+                    testType = "combined",
+                    numRot = 10,
+                    numShifts = 10,
+                    seedNum = seedNum)
+output$pval
+```
+
 ### Alternative test statistics
 
-Six alternative statistics are available for each type of test. However, as seen here, the choice among these statistics has been shown to make little difference on the test results[^3].
+Six alternative statistics are available for each of the previously discussed types of tests (rotational, toroidal, or combined). The six statistics can be accessed by passing one of CalcPsiDWS, CalcPsiUWS, CalcPsiCWS, CalcPsiDWA, CalcPsiUWA, or CalcPsiCWA to the `psiFun` argument. The abbreviations DWS, UWS, CWS, DWA, UWA, and CWA refer to the different computations taking place on the differences between the two sample's bivariate empirical cumulative distribution functions. The DW, UW, and CW mean that the differences are being double weighted, uniformly weighted, or complimentary weighted, respectively, and the appended S and A refer to the squared exponent or absolute value being applied to the differences. More details can be found in Section 5.1 of McKinney (2022)[^4]. The default statistic is CWS. However, as seen here, the choice among these statistics has been shown to make little difference on the test results[^3]. Consequently, the p-values within the S or A series are identical for the same random number seed.
 
 ```{r, cache = TRUE}
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined",
                     psiFun = CalcPsiDWS,
-                    seedNum = 1231)
+                    seedNum = seedNum)
+output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined",
                     psiFun = CalcPsiUWS,
-                    seedNum = 1232)
+                    seedNum = seedNum)
+output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
@@ -138,27 +249,31 @@ output <- distdiffr(sample1,
                     testType = "combined",
                     psiFun = CalcPsiCWS, # Default
                     seedNum = seedNum)
+output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined",
                     psiFun = CalcPsiDWA,
-                    seedNum = 1233)
+                    seedNum = seedNum)
+output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined",
                     psiFun = CalcPsiUWA,
-                    seedNum = 1234)
+                    seedNum = seedNum)
+output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
                     sample2,
                     testType = "combined",
                     psiFun = CalcPsiCWA,
-                    seedNum = 1235)
+                    seedNum = seedNum)
+output$psiStat
 output$pval
 ```
 
@@ -180,7 +295,7 @@ output1$pval == output2$pval
 
 ## Application (when a difference exists)
 
-Below demonstrates test results when the null hypothesis is false (i.e., there exists some difference between the two distributions). This is shown by separating the two samples by the species Setosa and Virginica, respectively.
+The following examples demonstrate test results when the null hypothesis is false (i.e., there exists some difference between the two distributions). This is shown by separating the two samples by the species Setosa and Virginica, respectively.
 
 ```{r, fig.align = 'center'}
 data(iris)
@@ -225,6 +340,7 @@ output$pval
 output <- distdiffr(sample1,
                     sample2,
                     testType = "toroidal",
+                    shiftThrshld = 25, # Default
                     seedNum = seedNum)
 output$pval
 
@@ -232,7 +348,7 @@ output$pval
 output <- distdiffr(sample1,
                     sample2,
                     testType = "toroidal",
-                    shiftThrshld = 100,
+                    shiftThrshld = 200,
                     seedNum = seedNum)
 output$pval
 
@@ -243,27 +359,31 @@ output <- distdiffr(sample1,
                     numShifts = 8,
                     seedNum = seedNum)
 output$pval
+```
 
+Again, the default test type is the combined rotational and toroidal shift test, with eight rotations and a threshold of 25 toroidal shifts as default values. These default settings are usually adequate to obtain meaningful results for bath cases of when the null hypothesis is true (equal distributions) and when the null hypothesis is false (unequal distributions).
+
+```{r, cache = TRUE}
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
                     sample2,
-                    testType = "combined",
+                    testType = "combined", # Default
+                    numRot = 8,            # Default
+                    shiftThrshld = 25,     # Default
                     seedNum = seedNum)
 output$pval
-
 ```
 
 ## The grouped_distdiffr() test
 
-Another version of the test also exists when combining bivariate data from multiple sources (e.g., subjects) into each of the two-samples, respectively. This test treats each subject's contribution equally. It can be called via the `grouped_distdiffr()` function. The plot below labels the species Setosa, Virsicolor, and Virginica as the integers 1, 2, and 3, respectively.
+Another version of the test also exists when combining bivariate data from multiple sources (e.g., subjects) into each of the two-samples, respectively. This test treats each subject's contribution equally. It can be called via the `grouped_distdiffr()` function. The plot below labels the species Setosa, Virsicolor, and Virginica as the integers 1, 2, and 3, respectively. Since the species is treated as a subject labeling, then each subject's contributions to the respective samples can be grouped and weighted such that each contribution is treated equally. Section 7.1.1 of McKinney (2022)[^4] describes the underlying mathematics in greater detail.
 
 ```{r, fig.align = 'center'}
-data(iris)
 # Randomly assign all three species to two samples
 iris$Species <- rep(1:3, each = 50)
-iris <- iris[sample.int(nrow(iris)), ]
-sample1 <- as.matrix(iris[1:75, c(1:2, 5)])
-sample2 <- as.matrix(iris[76:150, c(1:2, 5)])
+irisPermuted <- iris[sample.int(nrow(iris)), ]
+sample1 <- as.matrix(irisPermuted[1:75, c(1:2, 5)])
+sample2 <- as.matrix(irisPermuted[76:150, c(1:2, 5)])
 pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
 
 plot(pooled_data[, 1],
@@ -275,13 +395,18 @@ plot(pooled_data[, 1],
      pty = "s",
      xlab = "Sepal Length",
      ylab = "Sepal Width")
-legend(7, 2.2,
-       legend = c("Sample 1", "Sample 2"),
-       pch = c(15, 15),
-       col = c("#1b9e77cc", "#e7298acc"))
+legend(6.4, 2.2,
+       legend = c("Setosa", "Virsicolor", "Virginica", "Sample 1", "Sample 2"),
+       pch = c(49, 50, 51, 15, 15),
+       col = c("black", "black", "black", "#1b9e77cc", "#e7298acc"),
+       ncol = 2)
+
+table(sample1[, "Species"])
+
+table(sample2[, "Species"])
 ```
 
-Since the species is treated as a subject labeling, then each subject's contributions to the respective samples can be grouped and weighted such that each contribution is treated equally. For example, although `sample1` had `r sum(sample1[, 3] == 1)` Setosas, `r sum(sample1[, 3] == 2)` Virsicolors, and `r sum(sample1[, 3] == 3)` Virginicas, the contributions of each to the overall test statistic will be weighted equally. This is also true of `sample2`.
+For example, although `sample1` has `r sum(sample1[, 3] == 1)` Setosas, `r sum(sample1[, 3] == 2)` Virsicolors, and `r sum(sample1[, 3] == 3)` Virginicas, the contributions of each to the overall test statistic will be weighted equally. This is also true of `sample2` which has `r sum(sample2[, 3] == 1)` Setosas, `r sum(sample2[, 3] == 2)` Virsicolors, and `r sum(sample2[, 3] == 3)` Virginicas as seen in the above table outputs.
 
 ```{r, cache = TRUE}
 output <- grouped_distdiffr(sample1,
@@ -295,3 +420,5 @@ output$pval
 [^2]: McKinney, E., Symanzik, J., 2019. Modifications of the Syrjala Test for Testing Spatial Distribution Differences Between Two Populations, In: 2019 JSM Proceedings. American Statistical Association, Alexandria, VA. pp. 2518-2530.
 
 [^3]: McKinney, E., Symanzik, J., 2021. Extensions to the Syrjala Test with Eye-Tracking Analysis Applications, In: 2021 JSM Proceedings. American Statistical Association, Alexandria, VA. In print.
+
+[^4]: McKinney, E., 2022. Extensions to the Syrjala Test with Eye-Tracking Data Analysis Applications in R. Ph.D. dissertation, Department of Mathematics and Statistics, Utah State University
