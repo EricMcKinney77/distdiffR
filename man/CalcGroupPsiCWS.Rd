@@ -14,7 +14,7 @@ CalcGroupPsiCWS(data, groups, subjects)
 \item{subjects}{A numeric vector of subject labels}
 }
 \value{
-the Psi CWS statistic for aggregated group data
+The Psi CWS statistic for aggregated group data
 }
 \description{
 This statistic computes the complementary weighted squared (CWS) differences

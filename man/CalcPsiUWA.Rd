@@ -7,12 +7,12 @@
 CalcPsiUWA(data, subjects)
 }
 \arguments{
-\item{data}{a two column matrix of the bivariate pooled samples}
+\item{data}{A two column matrix of the bivariate pooled samples}
 
-\item{subjects}{a numerical vector of sample labels (use either 1 or 2)}
+\item{subjects}{A numerical vector of sample labels (use either 1 or 2)}
 }
 \value{
-the Psi UWA statistic
+The Psi UWA statistic
 }
 \description{
 This statistic computes the uniformly weighted absolute (UWA) differences between

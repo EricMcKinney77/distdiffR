@@ -11,7 +11,7 @@ grouped_distdiffr(
   propPnts = NULL,
   numShifts = NULL,
   shiftThrshld = 25,
-  numPerms = 99,
+  numPerms = 999,
   psiFun = CalcGroupPsiCWS,
   seedNum = NULL
 )

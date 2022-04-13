@@ -5,8 +5,8 @@
 #' For more information, see \insertCite{mckinney2022extensions;textual}{distdiffR}
 #' and \insertCite{mckinney2021extensions;textual}{distdiffR}.
 #'
-#' @param data a two column matrix of the bivariate pooled samples
-#' @param subjects a numerical vector of sample labels (use either 1 or 2)
+#' @param data A two column matrix of the bivariate pooled samples
+#' @param subjects A numerical vector of sample labels (use either 1 or 2)
 #'
 #' @return the Psi CWA statistic
 #' @export

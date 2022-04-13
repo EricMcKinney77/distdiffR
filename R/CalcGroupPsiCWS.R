@@ -10,7 +10,7 @@
 #' @param groups A numeric vector of sample (or group) labels (use either 1 or 2)
 #' @param subjects A numeric vector of subject labels
 #'
-#' @return the Psi CWS statistic for aggregated group data
+#' @return The Psi CWS statistic for aggregated group data
 #' @export
 #' @references
 #' \insertRef{mckinney2022extensions}{distdiffR}

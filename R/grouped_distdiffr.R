@@ -61,7 +61,7 @@ grouped_distdiffr <- function(aggdata1,
                               propPnts = NULL,
                               numShifts = NULL,
                               shiftThrshld = 25,
-                              numPerms = 99,
+                              numPerms = 999,
                               psiFun = CalcGroupPsiCWS,
                               seedNum = NULL) {
   # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.

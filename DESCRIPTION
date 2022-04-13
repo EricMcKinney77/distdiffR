@@ -1,12 +1,13 @@
 Package: distdiffR
 Title: Two-Sample Tests of Distributional Equality for Bivariate Data
 Version: 0.1.0
-Authors@R: 
+Authors@R:
     person(given = "Eric",
            family = "McKinney",
            role = c("aut", "cre"),
            email = "ericmckinney77@gmail.com",
            comment = c(ORCID = "0000-0001-7537-9877"))
+Author: Eric McKinney
 Description: A collection of bivariate two-sample tests for distributional
     equality are provided. The tests make use of statistics between empirical
     distribution functions averaged across a series of rotations and or toroidal
