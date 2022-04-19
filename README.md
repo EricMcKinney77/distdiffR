@@ -12,8 +12,10 @@ Another version of the test also exists when combining bivariate data from multi
 
 You can install the development version of dplyr from GitHub.
 
-`# install.packages("devtools")`
-`devtools::install_github("EricMcKinney77/distdiffR")`
+```
+install.packages("devtools")
+devtools::install_github("EricMcKinney77/distdiffR")
+```
 
 ## Usage
 
