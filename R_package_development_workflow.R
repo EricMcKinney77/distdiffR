@@ -14,7 +14,6 @@ create_package("~/Documents/GitHub/distdiffR")
 # (4) Make an initial commit, pull, and push to the remote master
 
 
-
 ################### Additions and Maintenance, Start here.
 
 # Reload devtools
@@ -57,16 +56,13 @@ devtools::build_manual()
 # (13) Check and commit again
 
 
-
 # (14) usethis::use_rcpp() for setting up the package for Rcpp
 
 # Rcpp: Create a C++ script, write the code and include documentation. Then Ctrl + Shift + D.
 # Install and Restart
 
 
-
 # (15) usethis::use_vignette("package_name") to create a vignette folder and template
-
 
 
 # (16) Use the Build menu (Build -> More -> Build source package) to create a .tar.gz file

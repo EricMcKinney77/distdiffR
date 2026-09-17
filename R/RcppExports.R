@@ -80,3 +80,11 @@ bcdf <- function(data, eval) {
     .Call(`_distdiffR_bcdf`, data, eval)
 }
 
+distdiffR_engine <- function(data, subjects, num_rot, num_shifts, stat_type, num_perms, seedNum) {
+    .Call(`_distdiffR_distdiffR_engine`, data, subjects, num_rot, num_shifts, stat_type, num_perms, seedNum)
+}
+
+grouped_distdiffR_engine <- function(data, subjects, subjNums, num_rot, num_shifts, stat_type, num_perms, seedNum) {
+    .Call(`_distdiffR_grouped_distdiffR_engine`, data, subjects, subjNums, num_rot, num_shifts, stat_type, num_perms, seedNum)
+}
+
