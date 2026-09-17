@@ -12,7 +12,6 @@ grouped_distdiffr(
   numShifts = NULL,
   shiftThrshld = 25,
   numPerms = 999,
-  psiFun = CalcGroupPsiCWS,
   seedNum = NULL
 )
 }
@@ -30,8 +29,6 @@ grouped_distdiffr(
 \item{shiftThrshld}{A numeric integer. Used if neither propPnts or numShifts are provided. If the pooled sample size is less than shiftThrshld, every point will be used as a toroidal shift origin. Otherwise, only a random sample of shiftThrshld points will be used.}
 
 \item{numPerms}{An integer number of permutations of the original data}
-
-\item{psiFun}{A function specifying the Psi statistic calculation. Default is the CalcGroupPsiCWS.}
 
 \item{seedNum}{An integer random seed value}
 }

@@ -24,7 +24,6 @@
 #' @param numShifts A numeric integer. The number of points to be used as toroidal shift origins. Must be less than the pooled sample size. Cannot provide both propPnts and numShifts. If neither are provided, shiftThrshld is used.
 #' @param shiftThrshld A numeric integer. Used if neither propPnts or numShifts are provided. If the pooled sample size is less than shiftThrshld, every point will be used as a toroidal shift origin. Otherwise, only a random sample of shiftThrshld points will be used.
 #' @param numPerms An integer number of permutations of the original data
-#' @param psiFun A function specifying the Psi statistic calculation. Default is the CalcGroupPsiCWS.
 #' @param seedNum An integer random seed value
 #'
 #' @return A list including three objects:
@@ -56,34 +55,37 @@
 #'                             seedNum = seedNum)
 #' output$pval
 grouped_distdiffr <- function(aggdata1,
-                              aggdata2,
-                              numRot = 8,
-                              propPnts = NULL,
-                              numShifts = NULL,
-                              shiftThrshld = 25,
-                              numPerms = 999,
-                              psiFun = CalcGroupPsiCWS,
-                              seedNum = NULL) {
-  # aggdata1 and aggdata2 are matrices where the three columns represent X, Y, and subjectNumber.
+                               aggdata2,
+                               numRot = 8,
+                               propPnts = NULL,
+                               numShifts = NULL,
+                               shiftThrshld = 25,
+                                numPerms = 999,
+                                seedNum = NULL) {
   subjNums1 <- aggdata1[, 3]
   subjNums2 <- aggdata2[, 3]
 
   aggdata1 <- aggdata1[, 1:2]
   aggdata2 <- aggdata2[, 1:2]
 
-  # Combines the data from two subjects into one long matrix.
   n1 <- nrow(aggdata1)
   n2 <- nrow(aggdata2)
-
-  # Check for conflict between propPnts and numShifts.
-  noPropPnts <- is.null(propPnts)
-  noNumShifts <- is.null(numShifts)
   n_pooled <- n1 + n2
-  if (!noPropPnts & !noNumShifts) {
+
+  if (!is.null(propPnts) && !is.null(numShifts)) {
     stop("Must provide either propPnts or numShifts, but not both.")
-  } else if (noPropPnts & noNumShifts) { # Use either numShifts or set using shiftThrshld.
-    numShifts <- ifelse(n_pooled > shiftThrshld, shiftThrshld, n_pooled)
-    noNumShifts <- FALSE
+  }
+
+  actualShifts <- shiftThrshld
+  if (!is.null(propPnts)) {
+    actualShifts <- round(propPnts * n_pooled)
+  } else if (!is.null(numShifts)) {
+    if (numShifts >= n_pooled) {
+      stop("number of shifts larger than the combined sample sizes!")
+    }
+    actualShifts <- numShifts
+  } else {
+    actualShifts <- ifelse(n_pooled < shiftThrshld, n_pooled, shiftThrshld)
   }
 
   hash1 <- hashMat(aggdata1)
@@ -99,33 +101,15 @@ grouped_distdiffr <- function(aggdata1,
     subjNums <- c(subjNums2, subjNums1)
   }
 
-  set.seed(seedNum)
-
-  ## Center the data around the bivariate median of the combined data sets.
   medians <- apply(data, 2, median)
   data <- sweep(data, 2, medians)
 
-  ## Rotate the data and stores the rotated data frames in a list.
-  rotDataList <- RotateData(data, numRot)
+  if (is.null(seedNum)) seedNum <- 42
+  
+  res <- grouped_distdiffR_engine(data, groupNums, subjNums, numRot, actualShifts, 3, numPerms, seedNum)
 
-  ## Applies toroidal shifts to the data and store the shifted data frames in a list.
-  if (!noPropPnts) {
-    lstOfRotShiftDataLists <- lapply(rotDataList, PropToroShiftData, n1, n2, propPnts)
-  } else if (!noNumShifts) {
-    lstOfRotShiftDataLists <- lapply(rotDataList, NumToroShiftData, n1, n2, numShifts)
-  }
-
-  ## Calculate psi for the real data
-  truePsi <- mean(sapply(lstOfRotShiftDataLists, function(rotDataLst) mean(sapply(rotDataLst, psiFun, groupNums, subjNums))))
-
-  # Calculate psi for all permutations of the rotated and toroidal shifted data.
-  permPsi <- rep(0, numPerms)
-  for (i in 1:numPerms) {
-    permGroups <- sample(groupNums, length(groupNums), replace = FALSE)
-    permPsi[i] <- mean(sapply(lstOfRotShiftDataLists, function(rotDataLst) mean(sapply(rotDataLst, psiFun, permGroups, subjNums))))
-  }
-
-  list(psiStat = truePsi,
-       permPsi = permPsi,
-       pval = mean(c((permPsi >= truePsi), 1)))
+  list(psiStat = res$psiStat,
+       permPsi = res$permPsi,
+       pval = mean(c((res$permPsi >= res$psiStat), 1)))
 }
+

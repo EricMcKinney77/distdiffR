@@ -13,7 +13,7 @@ distdiffr(
   numShifts = NULL,
   shiftThrshld = 25,
   numPerms = 999,
-  psiFun = CalcPsiCWS,
+  psiStat = "CWS",
   seedNum = NULL
 )
 }
@@ -34,7 +34,7 @@ distdiffr(
 
 \item{numPerms}{An integer number of permutations of the original data.}
 
-\item{psiFun}{A function specifying the Psi statistic calculation.}
+\item{psiStat}{A string specifying the Psi statistic calculation. Must be one of c("CWA", "DWA", "UWA", "CWS", "DWS", "UWS").}
 
 \item{seedNum}{An integer random seed value.}
 }
@@ -75,51 +75,57 @@ pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
 
 # Rotational test
 output <- distdiffr(sample1, # Note: Data inputs must be matrices
-                    sample2,
-                    testType = "rotational",
-                    numRot = 8, # Default value
-                    seedNum = seedNum)
+  sample2,
+  testType = "rotational",
+  numRot = 8, # Default value
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with proportions of points
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    propPnts = 0.1,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  propPnts = 0.1,
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a threshold below pooled sample size
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    shiftThrshld = 25, # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  shiftThrshld = 25, # Default
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a threshold above pooled sample size
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    shiftThrshld = 200,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  shiftThrshld = 200,
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a number of shifts
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    numShifts = 8,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  numShifts = 8,
+  seedNum = seedNum
+)
 output$pval
 
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    shiftThrshld = 25,     # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  shiftThrshld = 25, # Default
+  seedNum = seedNum
+)
 output$pval
 
 # Also see browseVignettes(package = "distdiffR")
