@@ -21,9 +21,9 @@ knitr::opts_chunk$set(
 error_hook <- knitr::knit_hooks$get("error")
 knitr::knit_hooks$set(error = function(x, options) {
   if (!is.null(n <- options$linewidth)) {
-    x = knitr:::split_lines(x)
-    if (any(nchar(x) > n)) x = strwrap(x, width = n)
-    x = paste(x, collapse = '\n')
+    x <- knitr:::split_lines(x)
+    if (any(nchar(x) > n)) x <- strwrap(x, width = n)
+    x <- paste(x, collapse = "\n")
   }
   error_hook(x, options)
 })
@@ -53,28 +53,31 @@ sample2 <- as.matrix(irisPermuted[76:150, 1:2])
 pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
 
 plot(pooled_data[, 1],
-     pooled_data[, 2],
-     xlim = c(4, 8),
-     ylim = c(1, 5),
-     col = c("#1b9e77cc", "#e7298acc")[pooled_data[, 3]],
-     pch = c(2, 1)[pooled_data[, 3]],
-     pty = "s",
-     xlab = "Sepal Length",
-     ylab = "Sepal Width")
+  pooled_data[, 2],
+  xlim = c(4, 8),
+  ylim = c(1, 5),
+  col = c("#1b9e77cc", "#e7298acc")[pooled_data[, 3]],
+  pch = c(2, 1)[pooled_data[, 3]],
+  pty = "s",
+  xlab = "Sepal Length",
+  ylab = "Sepal Width"
+)
 legend(7, 2.2,
-       legend = c("Sample 1", "Sample 2"),
-       pch = c(2, 1),
-       col = c("#1b9e77cc", "#e7298acc"))
+  legend = c("Sample 1", "Sample 2"),
+  pch = c(2, 1),
+  col = c("#1b9e77cc", "#e7298acc")
+)
 ```
 
 
 ```{r, cache = TRUE}
 # Rotational test
 output <- distdiffr(sample1, # Note: Data inputs must be matrices
-                    sample2,
-                    testType = "rotational",
-                    numRot = 8, # Default value
-                    seedNum = seedNum)
+  sample2,
+  testType = "rotational",
+  numRot = 8, # Default value
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -85,10 +88,11 @@ Although simulations have suggested that the default eight number of rotations i
 ```{r, cache = TRUE}
 # Rotational test with 50 rotations
 output <- distdiffr(sample1, # Note: Data inputs must be matrices
-                    sample2,
-                    testType = "rotational",
-                    numRot = 50,
-                    seedNum = seedNum)
+  sample2,
+  testType = "rotational",
+  numRot = 50,
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -99,34 +103,38 @@ Similar results are also shown for the more powerful toroidal and combined (rota
 ```{r, cache = TRUE}
 # Toroidal shift test with proportions of points
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    propPnts = 0.1,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  propPnts = 0.1,
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a threshold below pooled sample size
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    shiftThrshld = 25, # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  shiftThrshld = 25, # Default
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a threshold above pooled sample size
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    shiftThrshld = 200,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  shiftThrshld = 200,
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a number of shifts
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    numShifts = 8,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  numShifts = 8,
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -135,11 +143,12 @@ When employing the test which uses the combined rotational and toroidal shift mo
 ```{r, cache = TRUE}
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    shiftThrshld = 25,     # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  shiftThrshld = 25, # Default
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -148,11 +157,12 @@ Alternatively, a proportion of the combined sample size may be specified for the
 ```{r, cache = TRUE}
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    propPnts = 0.1,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  propPnts = 0.1,
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -161,11 +171,12 @@ Or, a specific number of toroidal shifts my be passed to `numShifts`. This will 
 ```{r, cache = TRUE}
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    numShifts = 10,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  numShifts = 10,
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -174,11 +185,12 @@ However, the number of toroidal shifts must be less than the combined sample siz
 ```{r, cache = TRUE, error = TRUE}
 # Error: number of shifts larger than the combined sample sizes!
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    numShifts = 151,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  numShifts = 151,
+  seedNum = seedNum
+)
 ```
 
 Also, `distdiffr()` will not allow arguments to be passed to more than one of `propPnts` or `numShifts`.
@@ -187,92 +199,102 @@ Also, `distdiffr()` will not allow arguments to be passed to more than one of `p
 options(width = 60)
 # Error: Must provide either propPnts or numShifts, but not both.
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    propPnts = 0.1,
-                    numShifts = 10,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  propPnts = 0.1,
+  numShifts = 10,
+  seedNum = seedNum
+)
 ```
 
 Specifying a different number of rotations may also be combined with the above options for toroidal shifts.
 
 ```{r, cache = TRUE}
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    numRot = 10,
-                    shiftThrshld = 25,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  numRot = 10,
+  shiftThrshld = 25,
+  seedNum = seedNum
+)
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    numRot = 10,
-                    propPnts = 0.1,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  numRot = 10,
+  propPnts = 0.1,
+  seedNum = seedNum
+)
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    numRot = 10,
-                    numShifts = 10,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  numRot = 10,
+  numShifts = 10,
+  seedNum = seedNum
+)
 output$pval
 ```
 
 ### Alternative test statistics
 
-Six alternative statistics are available for each of the previously discussed types of tests (rotational, toroidal, or combined). The six statistics can be accessed by passing one of CalcPsiDWS, CalcPsiUWS, CalcPsiCWS, CalcPsiDWA, CalcPsiUWA, or CalcPsiCWA to the `psiFun` argument. The abbreviations DWS, UWS, CWS, DWA, UWA, and CWA refer to the different computations taking place on the differences between the two sample's bivariate empirical cumulative distribution functions. The DW, UW, and CW mean that the differences are being double weighted, uniformly weighted, or complimentary weighted, respectively, and the appended S and A refer to the squared exponent or absolute value being applied to the differences. More details can be found in Section 5.1 of McKinney (2022)[^4]. The default statistic is CWS. However, as seen here, the choice among these statistics has been shown to make little difference on the test results[^3]. Consequently, the p-values within the S or A series are identical for the same random number seed.
+Six alternative statistics are available for each of the previously discussed types of tests (rotational, toroidal, or combined). The six statistics can be accessed by passing one of "DWS", "UWS", "CWS", "DWA", "UWA", or "CWA" to the `psiStat` argument. The abbreviations DWS, UWS, CWS, DWA, UWA, and CWA refer to the different computations taking place on the differences between the two sample's bivariate empirical cumulative distribution functions. The DW, UW, and CW mean that the differences are being double weighted, uniformly weighted, or complimentary weighted, respectively, and the appended S and A refer to the squared exponent or absolute value being applied to the differences. More details can be found in Section 5.1 of McKinney (2022)[^4]. The default statistic is "CWS". However, as seen here, the choice among these statistics has been shown to make little difference on the test results[^3]. Consequently, the p-values within the S or A series are identical for the same random number seed.
 
 ```{r, cache = TRUE}
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    psiFun = CalcPsiDWS,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  psiStat = "DWS",
+  seedNum = seedNum
+)
 output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    psiFun = CalcPsiUWS,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  psiStat = "UWS",
+  seedNum = seedNum
+)
 output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    psiFun = CalcPsiCWS, # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  psiStat = "CWS", # Default
+  seedNum = seedNum
+)
 output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    psiFun = CalcPsiDWA,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  psiStat = "DWA",
+  seedNum = seedNum
+)
 output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    psiFun = CalcPsiUWA,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  psiStat = "UWA",
+  seedNum = seedNum
+)
 output$psiStat
 output$pval
 
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined",
-                    psiFun = CalcPsiCWA,
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined",
+  psiStat = "CWA",
+  seedNum = seedNum
+)
 output$psiStat
 output$pval
 ```
@@ -283,12 +305,14 @@ Additionally, for any of the above tests, the data input order is arbitrary, e.g
 
 ```{r, cache = TRUE}
 output1 <- distdiffr(sample1,
-                     sample2,
-                     seedNum = seedNum)
+  sample2,
+  seedNum = seedNum
+)
 
 output2 <- distdiffr(sample2,
-                     sample1,
-                     seedNum = seedNum)
+  sample1,
+  seedNum = seedNum
+)
 
 output1$pval == output2$pval
 ```
@@ -304,18 +328,20 @@ sample2 <- as.matrix(iris[iris[5] == "virginica", -(3:5)])
 pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
 
 plot(pooled_data[, 1],
-     pooled_data[, 2],
-     xlim = c(4, 8),
-     ylim = c(1, 5),
-     col = c("#7570b3cc", "#d95f02cc")[pooled_data[, 3]],
-     pch = c(2, 1)[pooled_data[, 3]],
-     pty = "s",
-     xlab = "Sepal Length",
-     ylab = "Sepal Width")
+  pooled_data[, 2],
+  xlim = c(4, 8),
+  ylim = c(1, 5),
+  col = c("#7570b3cc", "#d95f02cc")[pooled_data[, 3]],
+  pch = c(2, 1)[pooled_data[, 3]],
+  pty = "s",
+  xlab = "Sepal Length",
+  ylab = "Sepal Width"
+)
 legend(6.6, 2.2,
-       legend = c("Sample 1 (Setosa)", "Sample 2 (Virginica)"),
-       pch = c(2, 1),
-       col = c("#7570b3cc", "#d95f02cc"))
+  legend = c("Sample 1 (Setosa)", "Sample 2 (Virginica)"),
+  pch = c(2, 1),
+  col = c("#7570b3cc", "#d95f02cc")
+)
 ```
 
 Indeed, the difference between the two samples results in minimal p-values among all of the test types.
@@ -323,41 +349,46 @@ Indeed, the difference between the two samples results in minimal p-values among
 ```{r, cache = TRUE}
 # Rotational test
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "rotational",
-                    seedNum = seedNum)
+  sample2,
+  testType = "rotational",
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with proportions of points
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    propPnts = 0.1,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  propPnts = 0.1,
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with thresholds below pooled sample size
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    shiftThrshld = 25, # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  shiftThrshld = 25, # Default
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with thresholds above pooled sample size
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    shiftThrshld = 200,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  shiftThrshld = 200,
+  seedNum = seedNum
+)
 output$pval
 
 # Toroidal shift test with a number of shifts
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "toroidal",
-                    numShifts = 8,
-                    seedNum = seedNum)
+  sample2,
+  testType = "toroidal",
+  numShifts = 8,
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -366,11 +397,12 @@ Again, the default test type is the combined rotational and toroidal shift test,
 ```{r, cache = TRUE}
 # Combined rotational and toroidal shift test
 output <- distdiffr(sample1,
-                    sample2,
-                    testType = "combined", # Default
-                    numRot = 8,            # Default
-                    shiftThrshld = 25,     # Default
-                    seedNum = seedNum)
+  sample2,
+  testType = "combined", # Default
+  numRot = 8, # Default
+  shiftThrshld = 25, # Default
+  seedNum = seedNum
+)
 output$pval
 ```
 
@@ -387,19 +419,21 @@ sample2 <- as.matrix(irisPermuted[76:150, c(1:2, 5)])
 pooled_data <- rbind(cbind(sample1, 1), cbind(sample2, 2))
 
 plot(pooled_data[, 1],
-     pooled_data[, 2],
-     xlim = c(4, 8),
-     ylim = c(1, 5),
-     col = c("#1b9e77cc", "#e7298acc")[pooled_data[, 4]],
-     pch = c("1", "2", "3")[pooled_data[, 3]],
-     pty = "s",
-     xlab = "Sepal Length",
-     ylab = "Sepal Width")
+  pooled_data[, 2],
+  xlim = c(4, 8),
+  ylim = c(1, 5),
+  col = c("#1b9e77cc", "#e7298acc")[pooled_data[, 4]],
+  pch = c("1", "2", "3")[pooled_data[, 3]],
+  pty = "s",
+  xlab = "Sepal Length",
+  ylab = "Sepal Width"
+)
 legend(6.4, 2.2,
-       legend = c("Setosa", "Virsicolor", "Virginica", "Sample 1", "Sample 2"),
-       pch = c(49, 50, 51, 15, 15),
-       col = c("black", "black", "black", "#1b9e77cc", "#e7298acc"),
-       ncol = 2)
+  legend = c("Setosa", "Virsicolor", "Virginica", "Sample 1", "Sample 2"),
+  pch = c(49, 50, 51, 15, 15),
+  col = c("black", "black", "black", "#1b9e77cc", "#e7298acc"),
+  ncol = 2
+)
 
 table(sample1[, "Species"])
 
@@ -410,8 +444,9 @@ For example, although `sample1` has `r sum(sample1[, 3] == 1)` Setosas, `r sum(s
 
 ```{r, cache = TRUE}
 output <- grouped_distdiffr(sample1,
-                            sample2,
-                            seedNum = seedNum)
+  sample2,
+  seedNum = seedNum
+)
 output$pval
 ```
 

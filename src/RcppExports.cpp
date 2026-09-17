@@ -50,11 +50,48 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// distdiffR_engine
+List distdiffR_engine(NumericMatrix data, IntegerVector subjects, int num_rot, int num_shifts, int stat_type, int num_perms, int seedNum);
+RcppExport SEXP _distdiffR_distdiffR_engine(SEXP dataSEXP, SEXP subjectsSEXP, SEXP num_rotSEXP, SEXP num_shiftsSEXP, SEXP stat_typeSEXP, SEXP num_permsSEXP, SEXP seedNumSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type subjects(subjectsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_rot(num_rotSEXP);
+    Rcpp::traits::input_parameter< int >::type num_shifts(num_shiftsSEXP);
+    Rcpp::traits::input_parameter< int >::type stat_type(stat_typeSEXP);
+    Rcpp::traits::input_parameter< int >::type num_perms(num_permsSEXP);
+    Rcpp::traits::input_parameter< int >::type seedNum(seedNumSEXP);
+    rcpp_result_gen = Rcpp::wrap(distdiffR_engine(data, subjects, num_rot, num_shifts, stat_type, num_perms, seedNum));
+    return rcpp_result_gen;
+END_RCPP
+}
+// grouped_distdiffR_engine
+List grouped_distdiffR_engine(NumericMatrix data, IntegerVector subjects, IntegerVector subjNums, int num_rot, int num_shifts, int stat_type, int num_perms, int seedNum);
+RcppExport SEXP _distdiffR_grouped_distdiffR_engine(SEXP dataSEXP, SEXP subjectsSEXP, SEXP subjNumsSEXP, SEXP num_rotSEXP, SEXP num_shiftsSEXP, SEXP stat_typeSEXP, SEXP num_permsSEXP, SEXP seedNumSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type subjects(subjectsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type subjNums(subjNumsSEXP);
+    Rcpp::traits::input_parameter< int >::type num_rot(num_rotSEXP);
+    Rcpp::traits::input_parameter< int >::type num_shifts(num_shiftsSEXP);
+    Rcpp::traits::input_parameter< int >::type stat_type(stat_typeSEXP);
+    Rcpp::traits::input_parameter< int >::type num_perms(num_permsSEXP);
+    Rcpp::traits::input_parameter< int >::type seedNum(seedNumSEXP);
+    rcpp_result_gen = Rcpp::wrap(grouped_distdiffR_engine(data, subjects, subjNums, num_rot, num_shifts, stat_type, num_perms, seedNum));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_distdiffR_NumToroShiftData", (DL_FUNC) &_distdiffR_NumToroShiftData, 4},
     {"_distdiffR_PropToroShiftData", (DL_FUNC) &_distdiffR_PropToroShiftData, 4},
     {"_distdiffR_bcdf", (DL_FUNC) &_distdiffR_bcdf, 2},
+    {"_distdiffR_distdiffR_engine", (DL_FUNC) &_distdiffR_distdiffR_engine, 7},
+    {"_distdiffR_grouped_distdiffR_engine", (DL_FUNC) &_distdiffR_grouped_distdiffR_engine, 8},
     {NULL, NULL, 0}
 };
 
