@@ -1,10 +1,10 @@
 library(distdiffR)
 
 # Benchmark settings
-sample_sizes <- seq(100, 2000, by = 200) # Test from 100 to 2000
-num_perms_benchmark <- 10 # Use a small number of permutations for speed
-num_perms_target <- 999 # Actual target number of permutations
-num_runs <- 5 # Number of runs per sample size for CI
+sample_sizes <- c(25, 50, 75, 100, 125, 150, 175, 200, 250, 300, 350, 400, 500, 600, 1000, 2000)
+num_perms_benchmark <- 999 # Use a small number of permutations for speed
+sample_size_target <- 7000 # Target sample size for extrapolation
+num_runs <- 10 # Number of runs per sample size for CI
 seedNum <- 123
 
 # Matrix to store times: rows = runs, cols = sample sizes
@@ -42,43 +42,11 @@ means <- colMeans(times_matrix)
 sds <- apply(times_matrix, 2, sd)
 ses <- sds / sqrt(num_runs)
 
-# Plotting with error bars
-plot(sample_sizes, means,
-  type = "b", pch = 19, col = "blue",
-  xlab = "Sample Size (n per group)",
-  ylab = "Time for 10 permutations (sec)",
-  main = "Computational Scaling of distdiffR with 95% CI"
+# Save results to CSV
+results <- data.frame(
+  "Sample Size (n)" = sample_sizes,
+  "Mean Time (s)" = means,
+  "Std Error (s)" = ses
 )
-# Add 95% CI error bars (approx 1.96 * SE)
-arrows(sample_sizes, means - 1.96 * ses, sample_sizes, means + 1.96 * ses,
-  code = 3, angle = 90, length = 0.05, col = "blue"
-)
-grid()
-
-# Estimation for N = 7000
-n_last <- tail(sample_sizes, 1)
-m_last <- tail(means, 1)
-se_last <- tail(ses, 1)
-n_target <- 7000
-
-# Complexity factor for extrapolation
-# Time(target) = Time(last) * (n_target/n_last) * (log(n_target)/log(n_last))
-scale_factor <- (n_target / n_last) * (log(n_target) / log(n_last))
-perm_factor <- (num_perms_target / num_perms_benchmark)
-
-est_mean_10_perms <- m_last * scale_factor
-est_se_10_perms <- se_last * scale_factor
-
-est_total_mean_secs <- est_mean_10_perms * perm_factor
-est_total_se_secs <- est_se_10_perms * perm_factor
-
-# 95% Confidence Interval
-lower_ci <- est_total_mean_secs - 1.96 * est_total_se_secs
-upper_ci <- est_total_mean_secs + 1.96 * est_total_se_secs
-
-cat("\n--- Estimation for N = 7000 (95% Confidence Interval) ---\n")
-cat(sprintf(
-  "Estimated Mean Time: %.2f seconds (%.2f minutes)\n",
-  est_total_mean_secs, est_total_mean_secs / 60
-))
-cat(sprintf("95%% CI: [%.2f, %.2f] seconds\n", lower_ci, upper_ci))
+write.csv(results, "benchmark_results.csv", row.names = FALSE)
+cat("\nResults saved to benchmark_results.csv\n")
